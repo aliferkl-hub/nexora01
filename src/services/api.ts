@@ -14,6 +14,9 @@ import {
   ManualChapterMeta,
   ManualChapter,
   ManualUserProgress,
+  PaymentTransaction,
+  CompanyInvite,
+  PaymentStatus,
 } from '../types';
 
 const TOKEN_KEY = 'nexora_auth_token';
@@ -131,6 +134,17 @@ export const api = {
         method: 'POST',
         body: JSON.stringify(payload),
       });
+    },
+    validateInvite: async (token: string) => {
+      return request<{ valid: boolean; invite: CompanyInvite }>(`/api/auth/invite/${token}`);
+    },
+    acceptInvite: async (payload: { token: string; password: string; name?: string }) => {
+      const data = await request<{ token: string; user: User; company: Company }>('/api/auth/accept-invite', {
+        method: 'POST',
+        body: JSON.stringify(payload),
+      });
+      setStoredToken(data.token);
+      return data;
     },
   },
 
@@ -368,23 +382,122 @@ export const api = {
     getCompanies: async () => {
       return request<Company[]>('/api/admin/companies');
     },
+    createCompany: async (payload: {
+      name: string;
+      contactName?: string;
+      contactEmail?: string;
+      phone?: string;
+      cnpj?: string;
+      industry?: string;
+      plan: string;
+      status: string;
+      initialPassword?: string;
+      sendInvite?: boolean;
+    }) => {
+      return request<{
+        message: string;
+        company: Company;
+        user?: User;
+        inviteToken?: string;
+        inviteUrl?: string;
+      }>('/api/admin/companies', {
+        method: 'POST',
+        body: JSON.stringify(payload),
+      });
+    },
     updateCompany: async (id: string, company: Partial<Company>) => {
       return request<Company>(`/api/admin/companies/${id}`, {
         method: 'PUT',
         body: JSON.stringify(company),
       });
     },
+    setCompanyStatus: async (id: string, status: string, reason?: string) => {
+      return request<{ message: string; company: Company }>(`/api/admin/companies/${id}/status`, {
+        method: 'PUT',
+        body: JSON.stringify({ status, reason }),
+      });
+    },
+    generateCompanyInvite: async (companyId: string, email: string, name?: string) => {
+      return request<{ message: string; inviteToken: string; inviteUrl: string }>(
+        `/api/admin/companies/${companyId}/invite`,
+        {
+          method: 'POST',
+          body: JSON.stringify({ email, name }),
+        }
+      );
+    },
     getPlans: async () => {
       return request<PlanConfig[]>('/api/admin/plans');
     },
+    createPlan: async (plan: Partial<PlanConfig>) => {
+      return request<PlanConfig>('/api/admin/plans', {
+        method: 'POST',
+        body: JSON.stringify(plan),
+      });
+    },
+    updatePlan: async (id: string, plan: Partial<PlanConfig>) => {
+      return request<PlanConfig>(`/api/admin/plans/${id}`, {
+        method: 'PUT',
+        body: JSON.stringify(plan),
+      });
+    },
+    deletePlan: async (id: string) => {
+      return request<{ message: string }>(`/api/admin/plans/${id}`, {
+        method: 'DELETE',
+      });
+    },
     updatePlans: async (plans: PlanConfig[]) => {
-      return request<{ message: string; plans: PlanConfig[] }>('/api/admin/plans', {
+      return request<{ message: string; plans: PlanConfig[] }>('/api/admin/plans/batch', {
         method: 'PUT',
         body: JSON.stringify({ plans }),
       });
     },
+    getPayments: async (statusFilter?: string) => {
+      const q = statusFilter ? `?status=${statusFilter}` : '';
+      return request<PaymentTransaction[]>(`/api/admin/payments${q}`);
+    },
+    updatePaymentStatus: async (id: string, payload: { status: PaymentStatus; adminNotes?: string }) => {
+      return request<{ message: string; payment: PaymentTransaction; company?: Company }>(
+        `/api/admin/payments/${id}/status`,
+        {
+          method: 'PUT',
+          body: JSON.stringify(payload),
+        }
+      );
+    },
     getAuditLogs: async () => {
       return request<AuditLog[]>('/api/admin/audit-logs');
+    },
+  },
+
+  // Payments & Subscription Checkout
+  payments: {
+    createPayment: async (payload: {
+      planId: string;
+      billingCycle: 'monthly' | 'yearly';
+      method: 'PIX' | 'CARTAO_PARCELADO';
+      customerNotes?: string;
+    }) => {
+      return request<PaymentTransaction>('/api/payments', {
+        method: 'POST',
+        body: JSON.stringify(payload),
+      });
+    },
+    submitReceipt: async (paymentId: string, payload: { receiptDetails: string; customerNotes?: string }) => {
+      return request<PaymentTransaction>(`/api/payments/${paymentId}/receipt`, {
+        method: 'POST',
+        body: JSON.stringify(payload),
+      });
+    },
+    getMyPayments: async () => {
+      return request<PaymentTransaction[]>('/api/payments/my');
+    },
+  },
+
+  // Public/Active Plans
+  plans: {
+    list: async () => {
+      return request<PlanConfig[]>('/api/plans');
     },
   },
 

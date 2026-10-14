@@ -171,19 +171,27 @@ export const ReportsModule: React.FC = () => {
               </tr>
             </thead>
             <tbody className="divide-y divide-slate-800/60 print:divide-gray-200">
-              {sourceReport.map((row) => (
-                <tr key={row.source} className="hover:bg-slate-900/40">
-                  <td className="py-3 font-semibold text-white print:text-black">{row.source}</td>
-                  <td className="py-3 font-mono text-slate-300 print:text-gray-800">{row.leads}</td>
-                  <td className="py-3 font-mono font-medium text-cyan-400 print:text-black">
-                    R$ {row.pipeline.toLocaleString('pt-BR')}
-                  </td>
-                  <td className="py-3 font-mono text-emerald-400 print:text-black">{row.won}</td>
-                  <td className="py-3 font-mono font-bold text-right text-purple-300 print:text-black">
-                    {row.conversionRate}
+              {sourceReport.length === 0 ? (
+                <tr>
+                  <td colSpan={5} className="py-8 text-center text-slate-500 font-sans text-xs">
+                    Nenhum lead ou canal de aquisição registrado ainda. Cadastre leads no CRM para visualizar o desempenho comercial real.
                   </td>
                 </tr>
-              ))}
+              ) : (
+                sourceReport.map((row) => (
+                  <tr key={row.source} className="hover:bg-slate-900/40">
+                    <td className="py-3 font-semibold text-white print:text-black">{row.source}</td>
+                    <td className="py-3 font-mono text-slate-300 print:text-gray-800">{row.leads}</td>
+                    <td className="py-3 font-mono font-medium text-cyan-400 print:text-black">
+                      R$ {row.pipeline.toLocaleString('pt-BR')}
+                    </td>
+                    <td className="py-3 font-mono text-emerald-400 print:text-black">{row.won}</td>
+                    <td className="py-3 font-mono font-bold text-right text-purple-300 print:text-black">
+                      {row.conversionRate}
+                    </td>
+                  </tr>
+                ))
+              )}
             </tbody>
           </table>
         </div>
@@ -211,16 +219,24 @@ export const ReportsModule: React.FC = () => {
               </tr>
             </thead>
             <tbody className="divide-y divide-slate-800/60 print:divide-gray-200">
-              {campaignPerformance.map((c, i) => (
-                <tr key={i} className="hover:bg-slate-900/40">
-                  <td className="py-3 font-sans font-semibold text-white print:text-black">{c.name}</td>
-                  <td className="py-3 text-slate-300 print:text-gray-800">{c.platform}</td>
-                  <td className="py-3 text-slate-300 print:text-gray-800">R$ {c.spent.toLocaleString('pt-BR')}</td>
-                  <td className="py-3 text-emerald-400 print:text-black">{c.conversions}</td>
-                  <td className="py-3 text-purple-400 print:text-black">R$ {c.cpa}</td>
-                  <td className="py-3 text-right font-bold text-cyan-400 print:text-black">{c.roi}</td>
+              {campaignPerformance.length === 0 ? (
+                <tr>
+                  <td colSpan={6} className="py-8 text-center text-slate-500 font-sans text-xs">
+                    Nenhuma campanha publicitária ativa no momento. Crie campanhas no módulo correspondente para acompanhar o ROI.
+                  </td>
                 </tr>
-              ))}
+              ) : (
+                campaignPerformance.map((c, i) => (
+                  <tr key={i} className="hover:bg-slate-900/40">
+                    <td className="py-3 font-sans font-semibold text-white print:text-black">{c.name}</td>
+                    <td className="py-3 text-slate-300 print:text-gray-800">{c.platform}</td>
+                    <td className="py-3 text-slate-300 print:text-gray-800">R$ {c.spent.toLocaleString('pt-BR')}</td>
+                    <td className="py-3 text-emerald-400 print:text-black">{c.conversions}</td>
+                    <td className="py-3 text-purple-400 print:text-black">R$ {c.cpa}</td>
+                    <td className="py-3 text-right font-bold text-cyan-400 print:text-black">{c.roi}</td>
+                  </tr>
+                ))
+              )}
             </tbody>
           </table>
         </div>

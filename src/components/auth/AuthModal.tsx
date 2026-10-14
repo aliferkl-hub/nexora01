@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   Lock,
   Mail,
@@ -13,9 +13,11 @@ import {
   AlertCircle,
   HelpCircle,
   Crown,
+  RefreshCw,
 } from 'lucide-react';
 import { useAuth } from '../../context/AuthContext';
 import { api } from '../../services/api';
+import { CompanyInvite } from '../../types';
 
 interface AuthModalProps {
   onSuccess?: () => void;
@@ -24,7 +26,7 @@ interface AuthModalProps {
 export const AuthModal: React.FC<AuthModalProps> = ({ onSuccess }) => {
   const { login, register } = useAuth();
 
-  const [mode, setMode] = useState<'login' | 'register' | 'forgot' | 'reset' | 'owner-setup'>('login');
+  const [mode, setMode] = useState<'login' | 'register' | 'forgot' | 'reset' | 'owner-setup' | 'invite'>('login');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [successMsg, setSuccessMsg] = useState<string | null>(null);
@@ -43,6 +45,46 @@ export const AuthModal: React.FC<AuthModalProps> = ({ onSuccess }) => {
 
   // Owner setup fields
   const [masterKey, setMasterKey] = useState('');
+
+  // Invite flow
+  const [inviteToken, setInviteToken] = useState<string | null>(null);
+  const [inviteData, setInviteData] = useState<CompanyInvite | null>(null);
+  const [validatingInvite, setValidatingInvite] = useState(false);
+
+  // Check URL for invite token on mount
+  useEffect(() => {
+    try {
+      const hash = window.location.hash;
+      let token: string | null = null;
+      if (hash.startsWith('#invite=')) {
+        token = hash.replace('#invite=', '').trim();
+      } else {
+        const params = new URLSearchParams(window.location.search);
+        token = params.get('invite');
+      }
+
+      if (token) {
+        setInviteToken(token);
+        setValidatingInvite(true);
+        api.auth
+          .validateInvite(token)
+          .then((res) => {
+            if (res.valid) {
+              setInviteData(res.invite);
+              setName(res.invite.name || '');
+              setEmail(res.invite.email || '');
+              setMode('invite');
+            }
+          })
+          .catch((err) => {
+            setError(err.message || 'Convite inválido ou expirado.');
+          })
+          .finally(() => setValidatingInvite(false));
+      }
+    } catch {
+      // ignore
+    }
+  }, []);
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -112,6 +154,29 @@ export const AuthModal: React.FC<AuthModalProps> = ({ onSuccess }) => {
     }
   };
 
+  const handleAcceptInvite = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!inviteToken) return;
+    setError(null);
+    setLoading(true);
+    try {
+      await api.auth.acceptInvite({
+        token: inviteToken,
+        password,
+        name,
+      });
+      // Clear hash from url
+      try {
+        window.location.hash = '';
+      } catch {}
+      window.location.reload();
+    } catch (err: any) {
+      setError(err.message || 'Erro ao definir senha e aceitar convite.');
+    } finally {
+      setLoading(false);
+    }
+  };
+
   const handleOwnerSetup = async (e: React.FormEvent) => {
     e.preventDefault();
     setError(null);
@@ -132,16 +197,6 @@ export const AuthModal: React.FC<AuthModalProps> = ({ onSuccess }) => {
     }
   };
 
-  // Quick Demo fill buttons for smooth testing
-  const fillCredentials = (type: 'owner' | 'client') => {
-    if (type === 'owner') {
-      setEmail('admin@nexora.ai');
-      setPassword('Nexora@2026!');
-    } else {
-      setEmail('lucas@nexusecom.com.br');
-      setPassword('Senha123!');
-    }
-  };
 
   return (
     <div className="min-h-screen bg-[#060913] flex items-center justify-center p-4 relative overflow-hidden">
@@ -164,59 +219,123 @@ export const AuthModal: React.FC<AuthModalProps> = ({ onSuccess }) => {
           </p>
         </div>
 
-        {/* Status Alerts */}
+        {/* Global Notifications */}
         {error && (
-          <div className="mb-4 p-3 rounded-xl bg-rose-950/40 border border-rose-500/40 text-rose-300 text-xs flex items-center gap-2">
+          <div className="mb-4 p-3 rounded-xl bg-rose-950/40 border border-rose-500/30 text-rose-300 text-xs flex items-center gap-2">
             <AlertCircle className="w-4 h-4 shrink-0 text-rose-400" />
             <span>{error}</span>
           </div>
         )}
 
         {successMsg && (
-          <div className="mb-4 p-3 rounded-xl bg-emerald-950/40 border border-emerald-500/40 text-emerald-300 text-xs flex items-center gap-2">
+          <div className="mb-4 p-3 rounded-xl bg-emerald-950/40 border border-emerald-500/30 text-emerald-300 text-xs flex items-center gap-2">
             <CheckCircle2 className="w-4 h-4 shrink-0 text-emerald-400" />
             <span>{successMsg}</span>
           </div>
+        )}
+
+        {/* Mode: ACCEPT INVITE */}
+        {mode === 'invite' && (
+          <form onSubmit={handleAcceptInvite} className="space-y-4">
+            <div className="p-3 rounded-xl bg-cyan-950/30 border border-cyan-500/30 text-xs text-cyan-300 space-y-1 text-center">
+              <p className="font-bold text-white text-sm">Convite de Acesso</p>
+              <p className="text-[11px] text-slate-300">
+                Você foi convidado para acessar o workspace de{' '}
+                <strong className="text-cyan-400">{inviteData?.companyName}</strong>.
+              </p>
+            </div>
+
+            <div>
+              <label className="block text-[11px] font-mono text-slate-400 mb-1">Seu Nome Completo</label>
+              <div className="relative">
+                <User className="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-slate-500" />
+                <input
+                  type="text"
+                  required
+                  value={name}
+                  onChange={(e) => setName(e.target.value)}
+                  className="w-full pl-9 pr-3 py-2 rounded-xl bg-slate-900 border border-slate-800 text-white placeholder-slate-500 text-xs focus:outline-none focus:border-cyan-500"
+                />
+              </div>
+            </div>
+
+            <div>
+              <label className="block text-[11px] font-mono text-slate-400 mb-1">E-mail Cadastrado</label>
+              <div className="relative">
+                <Mail className="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-slate-500" />
+                <input
+                  type="email"
+                  disabled
+                  value={email}
+                  className="w-full pl-9 pr-3 py-2 rounded-xl bg-slate-950 border border-slate-800 text-slate-400 text-xs font-mono"
+                />
+              </div>
+            </div>
+
+            <div>
+              <label className="block text-[11px] font-mono text-slate-400 mb-1">Defina sua Senha de Acesso *</label>
+              <div className="relative">
+                <Lock className="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-slate-500" />
+                <input
+                  type="password"
+                  required
+                  minLength={8}
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  placeholder="Mínimo 8 dígitos"
+                  className="w-full pl-9 pr-3 py-2 rounded-xl bg-slate-900 border border-slate-800 text-white placeholder-slate-500 text-xs focus:outline-none focus:border-cyan-500 font-mono"
+                />
+              </div>
+            </div>
+
+            <button
+              type="submit"
+              disabled={loading}
+              className="w-full py-2.5 rounded-xl bg-gradient-to-r from-blue-600 to-cyan-500 text-white font-bold text-xs shadow-md hover:brightness-110 flex items-center justify-center gap-2 cursor-pointer disabled:opacity-50"
+            >
+              {loading ? <RefreshCw className="w-4 h-4 animate-spin" /> : <span>Definir Senha & Entrar</span>}
+            </button>
+          </form>
         )}
 
         {/* Mode: LOGIN */}
         {mode === 'login' && (
           <form onSubmit={handleLogin} className="space-y-4">
             <div>
-              <label className="block text-xs font-medium text-slate-300 mb-1">E-mail Corporativo</label>
+              <label className="block text-[11px] font-mono text-slate-400 mb-1">E-mail Corporativo</label>
               <div className="relative">
-                <Mail className="w-4 h-4 text-slate-500 absolute left-3 top-1/2 -translate-y-1/2" />
+                <Mail className="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-slate-500" />
                 <input
                   type="email"
                   required
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
-                  placeholder="exemplo@suaempresa.com"
-                  className="w-full bg-[#080d1a] border border-slate-800 rounded-xl pl-9 pr-3 py-2 text-xs text-white placeholder-slate-500 focus:border-cyan-500 focus:ring-1 focus:ring-cyan-500 outline-none transition-all"
+                  placeholder="voce@empresa.com.br"
+                  className="w-full pl-9 pr-3 py-2 rounded-xl bg-slate-900 border border-slate-800 text-white placeholder-slate-500 text-xs focus:outline-none focus:border-cyan-500 font-mono"
                 />
               </div>
             </div>
 
             <div>
               <div className="flex items-center justify-between mb-1">
-                <label className="text-xs font-medium text-slate-300">Senha Segura</label>
+                <label className="text-[11px] font-mono text-slate-400">Senha</label>
                 <button
                   type="button"
                   onClick={() => setMode('forgot')}
-                  className="text-[11px] text-cyan-400 hover:text-cyan-300 transition-colors"
+                  className="text-[11px] text-cyan-400 hover:text-cyan-300 font-mono"
                 >
-                  Esqueceu a senha?
+                  Esqueceu?
                 </button>
               </div>
               <div className="relative">
-                <Lock className="w-4 h-4 text-slate-500 absolute left-3 top-1/2 -translate-y-1/2" />
+                <Lock className="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-slate-500" />
                 <input
                   type="password"
                   required
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   placeholder="••••••••"
-                  className="w-full bg-[#080d1a] border border-slate-800 rounded-xl pl-9 pr-3 py-2 text-xs text-white placeholder-slate-500 focus:border-cyan-500 focus:ring-1 focus:ring-cyan-500 outline-none transition-all"
+                  className="w-full pl-9 pr-3 py-2 rounded-xl bg-slate-900 border border-slate-800 text-white placeholder-slate-500 text-xs focus:outline-none focus:border-cyan-500 font-mono"
                 />
               </div>
             </div>
@@ -236,37 +355,13 @@ export const AuthModal: React.FC<AuthModalProps> = ({ onSuccess }) => {
               )}
             </button>
 
-            {/* Quick Demo Credentials */}
-            <div className="pt-3 border-t border-slate-800/80">
-              <p className="text-[10px] text-slate-500 font-mono text-center uppercase tracking-wider mb-2">
-                Acesso Rápido de Testes
-              </p>
-              <div className="grid grid-cols-2 gap-2">
-                <button
-                  type="button"
-                  onClick={() => fillCredentials('owner')}
-                  className="px-2.5 py-1.5 rounded-lg bg-amber-950/20 border border-amber-500/30 text-amber-300 hover:bg-amber-950/40 text-[11px] font-medium flex items-center justify-center gap-1.5 transition-colors"
-                >
-                  <Crown className="w-3 h-3 text-amber-400" />
-                  <span>Proprietário</span>
-                </button>
-                <button
-                  type="button"
-                  onClick={() => fillCredentials('client')}
-                  className="px-2.5 py-1.5 rounded-lg bg-blue-950/20 border border-blue-500/30 text-blue-300 hover:bg-blue-900/30 text-[11px] font-medium flex items-center justify-center gap-1.5 transition-colors"
-                >
-                  <Building className="w-3 h-3 text-cyan-400" />
-                  <span>Empresa Cliente</span>
-                </button>
-              </div>
-            </div>
 
             <div className="text-center pt-2">
               <span className="text-xs text-slate-400">Não possui conta? </span>
               <button
                 type="button"
                 onClick={() => setMode('register')}
-                className="text-xs font-semibold text-cyan-400 hover:text-cyan-300"
+                className="text-xs font-semibold text-cyan-400 hover:text-cyan-300 cursor-pointer"
               >
                 Cadastre sua empresa
               </button>
@@ -278,82 +373,77 @@ export const AuthModal: React.FC<AuthModalProps> = ({ onSuccess }) => {
         {mode === 'register' && (
           <form onSubmit={handleRegister} className="space-y-3">
             <div>
-              <label className="block text-xs font-medium text-slate-300 mb-1">Nome da Empresa</label>
+              <label className="block text-[11px] font-mono text-slate-400 mb-1">Nome da Empresa *</label>
               <div className="relative">
-                <Building className="w-4 h-4 text-slate-500 absolute left-3 top-1/2 -translate-y-1/2" />
+                <Building className="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-slate-500" />
                 <input
                   type="text"
                   required
                   value={companyName}
                   onChange={(e) => setCompanyName(e.target.value)}
                   placeholder="Ex: Nexus Tech Marketing"
-                  className="w-full bg-[#080d1a] border border-slate-800 rounded-xl pl-9 pr-3 py-2 text-xs text-white placeholder-slate-500 focus:border-cyan-500 outline-none"
+                  className="w-full pl-9 pr-3 py-2 rounded-xl bg-slate-900 border border-slate-800 text-white placeholder-slate-500 text-xs focus:outline-none focus:border-cyan-500"
                 />
               </div>
             </div>
 
             <div className="grid grid-cols-2 gap-2">
               <div>
-                <label className="block text-xs font-medium text-slate-300 mb-1">Ramo de Atuação</label>
-                <select
+                <label className="block text-[11px] font-mono text-slate-400 mb-1">Segmento</label>
+                <input
+                  type="text"
                   value={companyIndustry}
                   onChange={(e) => setCompanyIndustry(e.target.value)}
-                  className="w-full bg-[#080d1a] border border-slate-800 rounded-xl px-2.5 py-2 text-xs text-slate-200 outline-none"
-                >
-                  <option value="Tecnologia & SaaS">Tecnologia & SaaS</option>
-                  <option value="E-Commerce & Varejo">E-Commerce & Varejo</option>
-                  <option value="Saúde & Clínica">Saúde & Clínica</option>
-                  <option value="Imobiliário & Construção">Imobiliário</option>
-                  <option value="Consultoria & Serviços">Consultoria & Serviços</option>
-                  <option value="Outro">Outro</option>
-                </select>
+                  placeholder="Tecnologia"
+                  className="w-full px-3 py-2 rounded-xl bg-slate-900 border border-slate-800 text-white placeholder-slate-500 text-xs focus:outline-none focus:border-cyan-500"
+                />
               </div>
               <div>
-                <label className="block text-xs font-medium text-slate-300 mb-1">Telefone / WhatsApp</label>
+                <label className="block text-[11px] font-mono text-slate-400 mb-1">Telefone / Whats</label>
                 <input
                   type="text"
                   value={companyPhone}
                   onChange={(e) => setCompanyPhone(e.target.value)}
-                  placeholder="+55 (11) 9..."
-                  className="w-full bg-[#080d1a] border border-slate-800 rounded-xl px-3 py-2 text-xs text-white placeholder-slate-500 focus:border-cyan-500 outline-none"
+                  placeholder="+55 (11) 98765-4321"
+                  className="w-full px-3 py-2 rounded-xl bg-slate-900 border border-slate-800 text-white placeholder-slate-500 text-xs focus:outline-none focus:border-cyan-500 font-mono"
                 />
               </div>
             </div>
 
             <div>
-              <label className="block text-xs font-medium text-slate-300 mb-1">Nome do Responsável</label>
+              <label className="block text-[11px] font-mono text-slate-400 mb-1">Nome do Responsável *</label>
               <div className="relative">
-                <User className="w-4 h-4 text-slate-500 absolute left-3 top-1/2 -translate-y-1/2" />
+                <User className="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-slate-500" />
                 <input
                   type="text"
                   required
                   value={name}
                   onChange={(e) => setName(e.target.value)}
-                  placeholder="Ex: Lucas Mendes"
-                  className="w-full bg-[#080d1a] border border-slate-800 rounded-xl pl-9 pr-3 py-2 text-xs text-white placeholder-slate-500 focus:border-cyan-500 outline-none"
+                  placeholder="Seu nome completo"
+                  className="w-full pl-9 pr-3 py-2 rounded-xl bg-slate-900 border border-slate-800 text-white placeholder-slate-500 text-xs focus:outline-none focus:border-cyan-500"
                 />
               </div>
             </div>
 
             <div>
-              <label className="block text-xs font-medium text-slate-300 mb-1">E-mail Profissional</label>
+              <label className="block text-[11px] font-mono text-slate-400 mb-1">E-mail Corporativo *</label>
               <div className="relative">
-                <Mail className="w-4 h-4 text-slate-500 absolute left-3 top-1/2 -translate-y-1/2" />
+                <Mail className="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-slate-500" />
                 <input
                   type="email"
                   required
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
-                  placeholder="seu.email@empresa.com"
-                  className="w-full bg-[#080d1a] border border-slate-800 rounded-xl pl-9 pr-3 py-2 text-xs text-white placeholder-slate-500 focus:border-cyan-500 outline-none"
+                  placeholder="contato@empresa.com.br"
+                  className="w-full pl-9 pr-3 py-2 rounded-xl bg-slate-900 border border-slate-800 text-white placeholder-slate-500 text-xs focus:outline-none focus:border-cyan-500 font-mono"
                 />
               </div>
             </div>
 
             <div>
-              <label className="block text-xs font-medium text-slate-300 mb-1">Senha (mínimo 8 dígitos)</label>
+              <label className="block text-[11px] font-mono text-slate-400 mb-1">Senha (mínimo 8 dígitos) *</label>
               <div className="relative">
-                <Lock className="w-4 h-4 text-slate-500 absolute left-3 top-1/2 -translate-y-1/2" />
+                <Lock className="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-slate-500" />
                 <input
                   type="password"
                   required
@@ -361,7 +451,7 @@ export const AuthModal: React.FC<AuthModalProps> = ({ onSuccess }) => {
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   placeholder="••••••••"
-                  className="w-full bg-[#080d1a] border border-slate-800 rounded-xl pl-9 pr-3 py-2 text-xs text-white placeholder-slate-500 focus:border-cyan-500 outline-none"
+                  className="w-full pl-9 pr-3 py-2 rounded-xl bg-slate-900 border border-slate-800 text-white placeholder-slate-500 text-xs focus:outline-none focus:border-cyan-500 font-mono"
                 />
               </div>
             </div>
@@ -369,19 +459,19 @@ export const AuthModal: React.FC<AuthModalProps> = ({ onSuccess }) => {
             <button
               type="submit"
               disabled={loading}
-              className="w-full py-2.5 mt-2 rounded-xl bg-gradient-to-r from-blue-600 via-indigo-600 to-purple-600 text-white font-medium text-xs shadow-[0_0_20px_rgba(59,130,246,0.3)] hover:brightness-110 active:scale-[0.99] transition-all flex items-center justify-center gap-2 cursor-pointer disabled:opacity-50"
+              className="w-full py-2.5 rounded-xl bg-gradient-to-r from-blue-600 via-indigo-600 to-purple-600 text-white font-medium text-xs shadow-[0_0_20px_rgba(59,130,246,0.3)] hover:brightness-110 active:scale-[0.99] transition-all flex items-center justify-center gap-2 cursor-pointer disabled:opacity-50"
             >
-              {loading ? <span>Criando Workspace...</span> : <span>Cadastrar e Iniciar Demonstração</span>}
+              {loading ? <span>Criando workspace...</span> : <span>Cadastrar e Iniciar</span>}
             </button>
 
             <div className="text-center pt-2">
-              <span className="text-xs text-slate-400">Já possui uma conta? </span>
+              <span className="text-xs text-slate-400">Já tem uma conta? </span>
               <button
                 type="button"
                 onClick={() => setMode('login')}
-                className="text-xs font-semibold text-cyan-400 hover:text-cyan-300"
+                className="text-xs font-semibold text-cyan-400 hover:text-cyan-300 cursor-pointer"
               >
-                Fazer login
+                Faça login
               </button>
             </div>
           </form>
@@ -390,20 +480,21 @@ export const AuthModal: React.FC<AuthModalProps> = ({ onSuccess }) => {
         {/* Mode: FORGOT PASSWORD */}
         {mode === 'forgot' && (
           <form onSubmit={handleForgot} className="space-y-4">
-            <p className="text-xs text-slate-400">
-              Digite o e-mail cadastrado. Um código seguro de redefinição será gerado pelo servidor.
+            <p className="text-xs text-slate-300">
+              Digite seu e-mail cadastrado para receber o código seguro de recuperação de senha.
             </p>
+
             <div>
-              <label className="block text-xs font-medium text-slate-300 mb-1">E-mail Cadastrado</label>
+              <label className="block text-[11px] font-mono text-slate-400 mb-1">E-mail Cadastrado</label>
               <div className="relative">
-                <Mail className="w-4 h-4 text-slate-500 absolute left-3 top-1/2 -translate-y-1/2" />
+                <Mail className="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-slate-500" />
                 <input
                   type="email"
                   required
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
-                  placeholder="seu.email@empresa.com"
-                  className="w-full bg-[#080d1a] border border-slate-800 rounded-xl pl-9 pr-3 py-2 text-xs text-white placeholder-slate-500 focus:border-cyan-500 outline-none"
+                  placeholder="voce@empresa.com.br"
+                  className="w-full pl-9 pr-3 py-2 rounded-xl bg-slate-900 border border-slate-800 text-white placeholder-slate-500 text-xs focus:outline-none focus:border-cyan-500 font-mono"
                 />
               </div>
             </div>
@@ -411,18 +502,18 @@ export const AuthModal: React.FC<AuthModalProps> = ({ onSuccess }) => {
             <button
               type="submit"
               disabled={loading}
-              className="w-full py-2.5 rounded-xl bg-blue-600 text-white font-medium text-xs hover:bg-blue-500 transition-colors"
+              className="w-full py-2.5 rounded-xl bg-blue-600 hover:bg-blue-500 text-white font-medium text-xs transition-colors flex items-center justify-center gap-2 cursor-pointer disabled:opacity-50"
             >
-              {loading ? 'Gerando...' : 'Gerar Código de Recuperação'}
+              {loading ? <span>Solicitando...</span> : <span>Solicitar Recuperação</span>}
             </button>
 
             <div className="text-center pt-2">
               <button
                 type="button"
                 onClick={() => setMode('login')}
-                className="text-xs text-slate-400 hover:text-white"
+                className="text-xs text-slate-400 hover:text-white cursor-pointer"
               >
-                Voltar para o Login
+                Voltar para o login
               </button>
             </div>
           </form>
@@ -432,32 +523,32 @@ export const AuthModal: React.FC<AuthModalProps> = ({ onSuccess }) => {
         {mode === 'reset' && (
           <form onSubmit={handleReset} className="space-y-4">
             <div>
-              <label className="block text-xs font-medium text-slate-300 mb-1">Código de Redefinição</label>
+              <label className="block text-[11px] font-mono text-slate-400 mb-1">Código de Recuperação</label>
               <div className="relative">
-                <KeyRound className="w-4 h-4 text-slate-500 absolute left-3 top-1/2 -translate-y-1/2" />
+                <KeyRound className="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-slate-500" />
                 <input
                   type="text"
                   required
                   value={resetToken}
                   onChange={(e) => setResetToken(e.target.value)}
-                  placeholder="Código de recuperação"
-                  className="w-full bg-[#080d1a] border border-slate-800 rounded-xl pl-9 pr-3 py-2 text-xs text-white outline-none"
+                  placeholder="Código gerado"
+                  className="w-full pl-9 pr-3 py-2 rounded-xl bg-slate-900 border border-slate-800 text-white placeholder-slate-500 text-xs focus:outline-none focus:border-cyan-500 font-mono"
                 />
               </div>
             </div>
 
             <div>
-              <label className="block text-xs font-medium text-slate-300 mb-1">Nova Senha (mínimo 8 dígitos)</label>
+              <label className="block text-[11px] font-mono text-slate-400 mb-1">Nova Senha (mín. 8 dígitos)</label>
               <div className="relative">
-                <Lock className="w-4 h-4 text-slate-500 absolute left-3 top-1/2 -translate-y-1/2" />
+                <Lock className="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-slate-500" />
                 <input
                   type="password"
                   required
                   minLength={8}
                   value={newPassword}
                   onChange={(e) => setNewPassword(e.target.value)}
-                  placeholder="••••••••"
-                  className="w-full bg-[#080d1a] border border-slate-800 rounded-xl pl-9 pr-3 py-2 text-xs text-white outline-none"
+                  placeholder="Nova senha segura"
+                  className="w-full pl-9 pr-3 py-2 rounded-xl bg-slate-900 border border-slate-800 text-white placeholder-slate-500 text-xs focus:outline-none focus:border-cyan-500 font-mono"
                 />
               </div>
             </div>
@@ -465,116 +556,21 @@ export const AuthModal: React.FC<AuthModalProps> = ({ onSuccess }) => {
             <button
               type="submit"
               disabled={loading}
-              className="w-full py-2.5 rounded-xl bg-emerald-600 text-white font-medium text-xs hover:bg-emerald-500 transition-colors"
+              className="w-full py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white font-medium text-xs transition-colors flex items-center justify-center gap-2 cursor-pointer disabled:opacity-50"
             >
-              {loading ? 'Salvando...' : 'Atualizar Senha com Sucesso'}
+              {loading ? <span>Redefinindo...</span> : <span>Salvar Nova Senha</span>}
             </button>
 
             <div className="text-center pt-2">
               <button
                 type="button"
                 onClick={() => setMode('login')}
-                className="text-xs text-slate-400 hover:text-white"
+                className="text-xs text-slate-400 hover:text-white cursor-pointer"
               >
-                Cancelar
+                Voltar para o login
               </button>
             </div>
           </form>
-        )}
-
-        {/* Mode: OWNER SETUP */}
-        {mode === 'owner-setup' && (
-          <form onSubmit={handleOwnerSetup} className="space-y-3">
-            <div className="p-2.5 rounded-xl bg-amber-950/20 border border-amber-500/30 text-amber-200 text-xs">
-              Configuração inicial protegida da conta master do Proprietário do NEXORA AI.
-            </div>
-
-            <div>
-              <label className="block text-xs font-medium text-slate-300 mb-1">Chave Mestra de Instalação</label>
-              <input
-                type="password"
-                required
-                value={masterKey}
-                onChange={(e) => setMasterKey(e.target.value)}
-                placeholder="Insira a chave mestra segura"
-                className="w-full bg-[#080d1a] border border-slate-800 rounded-xl px-3 py-2 text-xs text-white outline-none"
-              />
-            </div>
-
-            <div>
-              <label className="block text-xs font-medium text-slate-300 mb-1">Nome do Proprietário</label>
-              <input
-                type="text"
-                required
-                value={name}
-                onChange={(e) => setName(e.target.value)}
-                placeholder="Alifer Madeiro"
-                className="w-full bg-[#080d1a] border border-slate-800 rounded-xl px-3 py-2 text-xs text-white outline-none"
-              />
-            </div>
-
-            <div>
-              <label className="block text-xs font-medium text-slate-300 mb-1">E-mail do Proprietário</label>
-              <input
-                type="email"
-                required
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                placeholder="admin@nexora.ai"
-                className="w-full bg-[#080d1a] border border-slate-800 rounded-xl px-3 py-2 text-xs text-white outline-none"
-              />
-            </div>
-
-            <div>
-              <label className="block text-xs font-medium text-slate-300 mb-1">Senha Master</label>
-              <input
-                type="password"
-                required
-                minLength={8}
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                placeholder="••••••••"
-                className="w-full bg-[#080d1a] border border-slate-800 rounded-xl px-3 py-2 text-xs text-white outline-none"
-              />
-            </div>
-
-            <button
-              type="submit"
-              disabled={loading}
-              className="w-full py-2.5 rounded-xl bg-amber-600 text-white font-medium text-xs hover:bg-amber-500 transition-colors"
-            >
-              {loading ? 'Configurando...' : 'Concluir Setup do Proprietário'}
-            </button>
-
-            <div className="text-center pt-2">
-              <button
-                type="button"
-                onClick={() => setMode('login')}
-                className="text-xs text-slate-400 hover:text-white"
-              >
-                Voltar
-              </button>
-            </div>
-          </form>
-        )}
-
-        {/* Owner setup trigger link at bottom */}
-        {mode === 'login' && (
-          <div className="mt-4 pt-3 border-t border-slate-800/80 text-center">
-            <button
-              type="button"
-              onClick={() => {
-                setMasterKey('NEXORA_OWNER_SETUP_2026');
-                setName('Alifer Madeiro');
-                setEmail('admin@nexora.ai');
-                setMode('owner-setup');
-              }}
-              className="text-[11px] text-slate-500 hover:text-amber-400 transition-colors flex items-center justify-center gap-1 mx-auto"
-            >
-              <Shield className="w-3 h-3" />
-              <span>Configuração Inicial do Proprietário</span>
-            </button>
-          </div>
         )}
       </div>
     </div>

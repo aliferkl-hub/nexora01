@@ -9,39 +9,21 @@
       "cnpj": "48.910.123/0001-90",
       "industry": "Tecnologia & Marketing Digital",
       "phone": "+55 (11) 98822-1000",
+      "contactName": "Alifer Madeiro",
+      "contactEmail": "admin@nexora.ai",
       "createdAt": "2026-10-13T23:05:03.512Z"
-    },
-    {
-      "id": "comp_nexus_digital",
-      "name": "Nexus E-Commerce Tech",
-      "slug": "nexus-digital",
-      "plan": "pro",
-      "status": "active",
-      "cnpj": "33.456.789/0001-12",
-      "industry": "Comércio Eletrônico & Varejo",
-      "phone": "+55 (21) 97123-4567",
-      "createdAt": "2026-09-13T23:05:03.513Z"
-    },
-    {
-      "id": "comp_lumina_saude",
-      "name": "Clínica Lumina Saúde & Estética",
-      "slug": "lumina-saude",
-      "plan": "starter",
-      "status": "trial",
-      "cnpj": "19.876.543/0001-44",
-      "industry": "Saúde e Bem-estar",
-      "phone": "+55 (31) 99876-5432",
-      "createdAt": "2026-10-03T23:05:03.513Z"
     },
     {
       "id": "comp_1791936943136_mxvav",
       "name": "Streaming TV",
       "slug": "streaming-tv",
       "plan": "starter",
-      "status": "trial",
+      "status": "active",
       "cnpj": "",
       "industry": "Tecnologia",
       "phone": "11973479473",
+      "contactName": "Alifer",
+      "contactEmail": "aliferstreaming@gmail.com",
       "createdAt": "2026-10-14T00:15:43.137Z"
     }
   ],
@@ -57,26 +39,6 @@
       "createdAt": "2026-10-13T23:05:03.513Z"
     },
     {
-      "id": "usr_nexus_admin",
-      "name": "Lucas Mendes",
-      "email": "lucas@nexusecom.com.br",
-      "passwordHash": "5d4bc2fdb93301cddaba15120dfd8609959e1797d27f54032e5f6f80823a4aae55ee6d1f9fa133df56488fa6cc3942d5ac797de4816f38275de93a42f9ebc4ec",
-      "passwordSalt": "nexora_secure_salt_2026",
-      "role": "admin",
-      "companyId": "comp_nexus_digital",
-      "createdAt": "2026-10-13T23:05:03.513Z"
-    },
-    {
-      "id": "usr_lumina_admin",
-      "name": "Dra. Mariana Costa",
-      "email": "mariana@clinicalumina.com.br",
-      "passwordHash": "5d4bc2fdb93301cddaba15120dfd8609959e1797d27f54032e5f6f80823a4aae55ee6d1f9fa133df56488fa6cc3942d5ac797de4816f38275de93a42f9ebc4ec",
-      "passwordSalt": "nexora_secure_salt_2026",
-      "role": "admin",
-      "companyId": "comp_lumina_saude",
-      "createdAt": "2026-10-13T23:05:03.513Z"
-    },
-    {
       "id": "usr_1791936943138_9ge1v",
       "name": "Alifer",
       "email": "aliferstreaming@gmail.com",
@@ -87,607 +49,26 @@
       "createdAt": "2026-10-14T00:15:43.138Z"
     }
   ],
-  "sessions": {
-    "fcd1f08a6e5ebec82a0cf71dd16c9a3f55921ec4df445ee78d8aa3d9957b9bc2": {
-      "userId": "usr_owner_01",
-      "companyId": "comp_nexora_main",
-      "expiresAt": 1792537509144
-    },
-    "1dd33ab055d0021ab16b58bb15bbe4aedcad3d2146eab4931bdff5820799810e": {
-      "userId": "usr_owner_01",
-      "companyId": "comp_nexora_main",
-      "expiresAt": 1792537512580
-    },
-    "d5d52ede2f083c9689e643ab03a9f6ed1cd625a5fb931c855c6288b7eae8c45b": {
-      "userId": "usr_owner_01",
-      "companyId": "comp_nexora_main",
-      "expiresAt": 1792537517361
-    },
-    "abe5478c1fcb267bfbe4ecb360277d8b353dfbbe643d39e25c913e1537090b31": {
-      "userId": "usr_owner_01",
-      "companyId": "comp_nexora_main",
-      "expiresAt": 1792537532936
-    },
-    "b0f54a1652b904de1fea104a1f079af958f6d22713e221a62a85973ae81dacca": {
-      "userId": "usr_owner_01",
-      "companyId": "comp_nexora_main",
-      "expiresAt": 1792537756103
-    },
-    "dbe268534ae5d1b97d822fcbcd5af4313f61ad45fb90b3569af980957cd92828": {
-      "userId": "usr_owner_01",
-      "companyId": "comp_nexora_main",
-      "expiresAt": 1792539283503
-    },
-    "8b250c95bdf2bc1bcbcd92a281e0210bf435e31010ae2cca9bd52b2ca50c852e": {
-      "userId": "usr_1791936943138_9ge1v",
-      "companyId": "comp_1791936943136_mxvav",
-      "expiresAt": 1792541743138
-    },
-    "0f4a5dc235410ab993b603e12569fbbcf4cc755ca424d5fc9f8369d41b31b21b": {
-      "userId": "usr_1791936943138_9ge1v",
-      "companyId": "comp_1791936943136_mxvav",
-      "expiresAt": 1792541856533
-    },
-    "42c9d65efdde44637358036f765011794ed53fe81d5ef1f696d224e973cff925": {
-      "userId": "usr_owner_01",
-      "companyId": "comp_nexora_main",
-      "expiresAt": 1792541891725
-    },
-    "0f63e08c7d374d5b219ae7ac256807d996a80d752e2ba1958bbc6ac24cc513c5": {
-      "userId": "usr_lumina_admin",
-      "companyId": "comp_lumina_saude",
-      "expiresAt": 1792541891806
-    },
-    "fcb2ebf3c8a9af8b4e77b860d38e05d91dcc9b61c7e622f196cc5987d3d53156": {
-      "userId": "usr_nexus_admin",
-      "companyId": "comp_nexus_digital",
-      "expiresAt": 1792541891822
-    },
-    "15ad97fa44992d189da3d5702d300c7adfc75bed6bf26cc178aac2b6dbc6943c": {
-      "userId": "usr_owner_01",
-      "companyId": "comp_nexora_main",
-      "expiresAt": 1792541934881
-    },
-    "e0cfa284f6f8df06d2e2f5aa06bed99a525683b419cc96992ea3bc46365b0b36": {
-      "userId": "usr_lumina_admin",
-      "companyId": "comp_lumina_saude",
-      "expiresAt": 1792541934977
-    },
-    "fa054279b3155e390fb0a50b22e0ad7a02524184fa3e486c010cdec95e0d7765": {
-      "userId": "usr_nexus_admin",
-      "companyId": "comp_nexus_digital",
-      "expiresAt": 1792541934994
-    }
-  },
+  "sessions": {},
   "resetTokens": {},
-  "manualProgress": {
-    "usr_owner_01": {
-      "completedChapters": [
-        "cap-1"
-      ],
-      "checkedItems": [
-        "chk-1-1",
-        "chk-1-2"
-      ],
-      "lastActiveChapterId": "cap-2"
-    }
-  },
-  "leads": [
-    {
-      "id": "lead_001",
-      "companyId": "comp_nexora_main",
-      "name": "Rafael Valente",
-      "companyName": "Valente Logística & Frotas",
-      "email": "rafael@valentelog.com.br",
-      "phone": "+55 11 98452-1100",
-      "stage": "negotiation",
-      "opportunityValue": 24500,
-      "source": "Google Ads",
-      "aiScore": 92,
-      "aiQualification": "Lead com alto faturamento, demanda urgente de automação de pós-venda e orçamento aprovado.",
-      "nextAction": "Apresentar proposta técnica comercial via Meet",
-      "nextActionDate": "2026-10-16",
-      "lgpdConsent": true,
-      "lgpdConsentDate": "2026-10-13T23:05:03.513Z",
-      "tags": [
-        "Empresa Grande",
-        "Automação",
-        "Urgente"
-      ],
-      "createdAt": "2026-10-08T23:05:03.513Z"
-    },
-    {
-      "id": "lead_002",
-      "companyId": "comp_nexora_main",
-      "name": "Juliana Siqueira",
-      "companyName": "Fintech Aurora Pay",
-      "email": "juliana.s@aurorapay.io",
-      "phone": "+55 11 97722-4433",
-      "stage": "proposal",
-      "opportunityValue": 48000,
-      "source": "LinkedIn Inbound",
-      "aiScore": 88,
-      "aiQualification": "Interesse em IA para triagem de suporte e integração via webhooks com CRM interno.",
-      "nextAction": "Enviar minuta de contrato com SLA",
-      "nextActionDate": "2026-10-15",
-      "lgpdConsent": true,
-      "lgpdConsentDate": "2026-10-13T23:05:03.513Z",
-      "tags": [
-        "Fintech",
-        "SaaS",
-        "API"
-      ],
-      "createdAt": "2026-10-05T23:05:03.513Z"
-    },
-    {
-      "id": "lead_003",
-      "companyId": "comp_nexora_main",
-      "name": "Eduardo Brandão",
-      "companyName": "Rede Farma Express",
-      "email": "eduardo@farmaexpress.com",
-      "phone": "+55 41 99123-8877",
-      "stage": "qualified",
-      "opportunityValue": 15000,
-      "source": "Meta Ads",
-      "aiScore": 74,
-      "aiQualification": "Potencial médio, quer validar campanha de captação local antes de expandir.",
-      "nextAction": "Enviar caso de sucesso de varejo farmacêutico",
-      "nextActionDate": "2026-10-18",
-      "lgpdConsent": true,
-      "lgpdConsentDate": "2026-10-13T23:05:03.513Z",
-      "tags": [
-        "Varejo",
-        "Tráfego Pago"
-      ],
-      "createdAt": "2026-10-10T23:05:03.513Z"
-    },
-    {
-      "id": "lead_004",
-      "companyId": "comp_nexora_main",
-      "name": "Camila Rocha",
-      "companyName": "Studio Arquitetura Contemporânea",
-      "email": "camila@rochaarquitetura.com",
-      "phone": "+55 31 98844-3210",
-      "stage": "new",
-      "opportunityValue": 9800,
-      "source": "Website Form",
-      "aiScore": 65,
-      "aiQualification": "Lead inbound recente solicitando consultoria de marketing de diferenciação.",
-      "nextAction": "Realizar primeiro contato via WhatsApp",
-      "nextActionDate": "2026-10-14",
-      "lgpdConsent": true,
-      "lgpdConsentDate": "2026-10-13T23:05:03.513Z",
-      "tags": [
-        "Novo Lead",
-        "Arquitetura"
-      ],
-      "createdAt": "2026-10-12T23:05:03.513Z"
-    },
-    {
-      "id": "lead_005",
-      "companyId": "comp_nexora_main",
-      "name": "Rodrigo Alencar",
-      "companyName": "Alencar Agro Indústria",
-      "email": "rodrigo@alencaragro.com.br",
-      "phone": "+55 65 99988-1234",
-      "stage": "closed_won",
-      "opportunityValue": 62000,
-      "source": "Indicação",
-      "aiScore": 98,
-      "aiQualification": "Contrato anual fechado. Projeto de expansão nacional com tráfego e IA.",
-      "nextAction": "Onboarding de implantação da equipe",
-      "nextActionDate": "2026-10-14",
-      "lgpdConsent": true,
-      "lgpdConsentDate": "2026-10-13T23:05:03.513Z",
-      "tags": [
-        "Cliente Ativo",
-        "Contrato Anual"
-      ],
-      "createdAt": "2026-09-23T23:05:03.513Z"
-    },
-    {
-      "id": "lead_1791936943138",
-      "companyId": "comp_1791936943136_mxvav",
-      "name": "Exemplo: Contato Qualificado",
-      "companyName": "Empresa Modelo Ltda",
-      "email": "contato@empresamodelo.com.br",
-      "phone": "+55 11 99999-0000",
-      "stage": "new",
-      "opportunityValue": 5000,
-      "source": "Cadastro Inicial",
-      "aiScore": 80,
-      "aiQualification": "Primeiro lead modelo gerado no cadastro para explorar o pipeline de vendas.",
-      "nextAction": "Agendar ligação de qualificação",
-      "nextActionDate": "2026-10-16",
-      "lgpdConsent": true,
-      "lgpdConsentDate": "2026-10-14T00:15:43.138Z",
-      "tags": [
-        "Primeiro Contato",
-        "Modelo"
-      ],
-      "createdAt": "2026-10-14T00:15:43.138Z"
-    }
-  ],
-  "leadInteractions": [
-    {
-      "id": "inter_001",
-      "leadId": "lead_001",
-      "type": "meeting",
-      "summary": "Reunião de Diagnóstico com diretoria",
-      "notes": "Discutimos os principais gargalos no fechamento de orçamentos. Solicitaram proposta até sexta.",
-      "createdAt": "2026-10-11T23:05:03.513Z"
-    },
-    {
-      "id": "inter_002",
-      "leadId": "lead_002",
-      "type": "email",
-      "summary": "Envio do escopo de arquitetura de automação",
-      "notes": "Enviado fluxograma do n8n integrado com CRM e disparador de IA.",
-      "createdAt": "2026-10-09T23:05:03.513Z"
-    }
-  ],
-  "marketingPlans": [
-    {
-      "id": "plan_1791935642670_kc2o1",
-      "companyId": "comp_nexora_main",
-      "title": "Estratégia IA - 13/10/2026",
-      "targetAudience": "CEOs e Diretores Comerciais",
-      "valueProposition": "IA integrada em tempo real com automações e webhooks",
-      "positioning": "Liderança Tecnológica em IA e Automação",
-      "goals": [
-        "Implementar recomendações geradas pelo motor de IA"
-      ],
-      "actions": [
-        {
-          "id": "act_1791935627792",
-          "title": "Executar plano tático recomendado pela Central de IA",
-          "priority": "high",
-          "deadline": "2026-10-28",
-          "status": "pending"
-        }
-      ],
-      "version": 1,
-      "updatedAt": "2026-10-13T23:54:02.670Z"
-    },
-    {
-      "id": "plan_1791935526341_jg83q",
-      "companyId": "comp_nexora_main",
-      "title": "Estratégia IA - 13/10/2026",
-      "targetAudience": "CEOs e Diretores Comerciais",
-      "valueProposition": "IA integrada em tempo real com automações e webhooks",
-      "positioning": "Liderança Tecnológica em IA e Automação",
-      "goals": [
-        "Implementar recomendações geradas pelo motor de IA"
-      ],
-      "actions": [
-        {
-          "id": "act_1791935511364",
-          "title": "Executar plano tático recomendado pela Central de IA",
-          "priority": "high",
-          "deadline": "2026-10-28",
-          "status": "pending"
-        }
-      ],
-      "version": 1,
-      "updatedAt": "2026-10-13T23:52:06.341Z"
-    },
-    {
-      "id": "plan_1791935327332_rmeko",
-      "companyId": "comp_nexora_main",
-      "title": "Estratégia IA - 13/10/2026",
-      "targetAudience": "CEOs e Diretores Comerciais",
-      "valueProposition": "IA integrada em tempo real com automações e webhooks",
-      "positioning": "Liderança Tecnológica em IA e Automação",
-      "goals": [
-        "Implementar recomendações geradas pelo motor de IA"
-      ],
-      "actions": [
-        {
-          "id": "act_1791935312058",
-          "title": "Executar plano tático recomendado pela Central de IA",
-          "priority": "high",
-          "deadline": "2026-10-28",
-          "status": "pending"
-        }
-      ],
-      "version": 1,
-      "updatedAt": "2026-10-13T23:48:47.332Z"
-    },
-    {
-      "id": "plan_1791934988033_ggd76",
-      "companyId": "comp_nexora_main",
-      "title": "Estratégia IA - 13/10/2026",
-      "targetAudience": "CEOs e Diretores Comerciais",
-      "valueProposition": "IA integrada em tempo real com automações e webhooks",
-      "positioning": "Liderança Tecnológica em IA e Automação",
-      "goals": [
-        "Implementar recomendações geradas pelo motor de IA"
-      ],
-      "actions": [
-        {
-          "id": "act_1791934973173",
-          "title": "Executar plano tático recomendado pela Central de IA",
-          "priority": "high",
-          "deadline": "2026-10-28",
-          "status": "pending"
-        }
-      ],
-      "version": 1,
-      "updatedAt": "2026-10-13T23:43:08.033Z"
-    },
-    {
-      "id": "plan_001",
-      "companyId": "comp_nexora_main",
-      "title": "Estratégia de Aquisição B2B Q4 — Nexora Growth",
-      "targetAudience": "CEOs, Diretores Comerciais e Fundadores de empresas com faturamento entre R$ 2M e R$ 20M/ano.",
-      "valueProposition": "Multiplique a capacidade de vendas da sua empresa combinando Inteligência Artificial preditiva, automação com n8n e campanhas de alta conversão.",
-      "positioning": "A plataforma definitiva que une o cérebro da IA com a força operacional de marketing e CRM.",
-      "goals": [
-        "Gerar 150 MQLs qualificados por mês",
-        "Alcançar CAC inferior a R$ 380,00",
-        "Atingir R$ 250.000 de novo pipeline no trimestre"
-      ],
-      "actions": [
-        {
-          "id": "act_1",
-          "title": "Lançamento de Campanha de Tráfego Direto no LinkedIn Ads",
-          "priority": "high",
-          "deadline": "2026-10-25",
-          "status": "in_progress"
-        },
-        {
-          "id": "act_2",
-          "title": "Produção de 12 Artigos Profundos sobre IA Aplicada a Negócios",
-          "priority": "medium",
-          "deadline": "2026-11-10",
-          "status": "pending"
-        },
-        {
-          "id": "act_3",
-          "title": "Automação de Enriquecimento de Leads com IA em Tempo Real",
-          "priority": "high",
-          "deadline": "2026-10-20",
-          "status": "completed"
-        },
-        {
-          "id": "act_4",
-          "title": "Webinar Comercial Exclusivo: O Futuro das Empresas com IA",
-          "priority": "high",
-          "deadline": "2026-11-05",
-          "status": "pending"
-        }
-      ],
-      "version": 2,
-      "updatedAt": "2026-10-13T23:05:03.513Z"
-    }
-  ],
-  "contentItems": [
-    {
-      "id": "content_001",
-      "companyId": "comp_nexora_main",
-      "platform": "linkedin",
-      "title": "Como a IA generativa está redefinindo o CAC em empresas B2B",
-      "category": "Artigo & Post Carrossel",
-      "tone": "Profissional, analítico e provocativo",
-      "body": "A maioria das empresas ainda usa IA apenas como corretor ortográfico. Aquelas que estão escalando usam agentes para qualificar leads em 2 minutos e calibrar campanhas de tráfego em tempo real.\n\nNos últimos 90 dias analisamos mais de 450 operações comerciais. O padrão que separa empresas que crescem daquelas estagnadas se resume a 3 pilares:\n\n1. Tempo de resposta: responder em menos de 5 min multiplica a conversão em 7x.\n2. Personalização em escala com agentes dedicados.\n3. Integração total entre tráfego e pipeline CRM.\n\nSua equipe ainda perde horas com tarefas operacionais manuais?",
-      "hashtags": [
-        "#InteligenciaArtificial",
-        "#GrowthMarketing",
-        "#VendasB2B",
-        "#NexoraAI"
-      ],
-      "status": "published",
-      "scheduledDate": "2026-10-12T10:00:00Z",
-      "createdAt": "2026-10-09T23:05:03.513Z"
-    },
-    {
-      "id": "content_002",
-      "companyId": "comp_nexora_main",
-      "platform": "instagram",
-      "title": "Bastidores: 5 automações que você precisa rodar no seu negócio hoje",
-      "category": "Reels / Vídeo Curto",
-      "tone": "Dinâmico, direto e inspirador",
-      "body": "Roteiro de vídeo para Reels/TikTok:\n[Cena 1 - Gancho]: Se você ainda responde clientes manualmente às 23h, está perdendo dinheiro todos os dias.\n[Cena 2 - Problema]: O cliente quer resposta instantânea. Se demorar 10 minutos, ele já comprou do concorrente.\n[Cena 3 - Solução]: Com a NEXORA AI, o webhook aciona a triagem, agenda a reunião e atualiza o CRM automaticamente.\n[Cena 4 - CTA]: Comente \"AUTOMACAO\" para ver na prática.",
-      "hashtags": [
-        "#AutomacaoEmpresarial",
-        "#MarketingDigital",
-        "#VendasNoAutomatico"
-      ],
-      "status": "ready",
-      "scheduledDate": "2026-10-15T18:00:00Z",
-      "createdAt": "2026-10-13T23:05:03.513Z"
-    },
-    {
-      "id": "content_003",
-      "companyId": "comp_nexora_main",
-      "platform": "email",
-      "title": "Sequência de Nutrição: O Diagnóstico de Maturidade com IA",
-      "category": "E-mail Comercial",
-      "tone": "Consultivo e persuasivo",
-      "body": "Olá, {{primeiro_nome}}!\n\nQuando conversamos com gestores comerciais, a principal queixa é sempre a mesma: \"nossos vendedores gastam 60% do dia preenchendo relatórios ao invés de vender\".\n\nPreparamos uma demonstração personalizada mostrando como centralizar todo o seu fluxo comercial na plataforma NEXORA AI.\n\nPodemos bater um papo de 15 minutos nesta quinta-feira?",
-      "hashtags": [],
-      "status": "draft",
-      "scheduledDate": "2026-10-17T09:00:00Z",
-      "createdAt": "2026-10-13T23:05:03.513Z"
-    }
-  ],
-  "campaigns": [
-    {
-      "id": "camp_001",
-      "companyId": "comp_nexora_main",
-      "name": "Campanha Q4 — Escala com Inteligência Artificial",
-      "platform": "Meta Ads",
-      "objective": "Geração de Leads Qualificados",
-      "status": "active",
-      "budget": 12000,
-      "spent": 4320,
-      "impressions": 148500,
-      "clicks": 4210,
-      "conversions": 218,
-      "cpa": 19.81,
-      "roi": 4.8,
-      "startDate": "2026-10-01",
-      "endDate": "2026-10-31",
-      "targetAudience": "Empresários, Gestores de Tráfego, Diretores de PME (28-55 anos)",
-      "creativeNotes": "Criativo em vídeo escuro com detalhes em neon azul e demonstração da interface."
-    },
-    {
-      "id": "camp_002",
-      "companyId": "comp_nexora_main",
-      "name": "Google Ads Search — Plataforma IA para Negócios",
-      "platform": "Google Ads",
-      "objective": "Tráfego Fundo de Funil & Vendas Diretas",
-      "status": "active",
-      "budget": 9500,
-      "spent": 3180,
-      "impressions": 62400,
-      "clicks": 2890,
-      "conversions": 142,
-      "cpa": 22.39,
-      "roi": 5.2,
-      "startDate": "2026-10-05",
-      "endDate": "2026-10-31",
-      "targetAudience": "Pesquisas por: software crm com ia, automação de marketing b2b, plataforma nexora",
-      "creativeNotes": "Anúncios responsivos de pesquisa com sitelinks para Central de IA e Demonstração."
-    },
-    {
-      "id": "camp_003",
-      "companyId": "comp_nexora_main",
-      "name": "LinkedIn Sponsored Content — Decisores C-Level",
-      "platform": "LinkedIn Ads",
-      "objective": "Reconhecimento & Oportunidades Enterprise",
-      "status": "planning",
-      "budget": 15000,
-      "spent": 0,
-      "impressions": 0,
-      "clicks": 0,
-      "conversions": 0,
-      "cpa": 0,
-      "roi": 0,
-      "startDate": "2026-10-20",
-      "endDate": "2026-11-20",
-      "targetAudience": "Chief Marketing Officers, Chief Revenue Officers e Diretores de Inovação",
-      "creativeNotes": "Whitepaper: O Guia Executivo de Implementação de IA em Vendas 2026."
-    }
-  ],
-  "automations": [
-    {
-      "id": "auto_001",
-      "companyId": "comp_nexora_main",
-      "name": "Qualificação Instantânea de Lead & Notificação",
-      "triggerType": "new_lead",
-      "actionType": "webhook_n8n",
-      "webhookUrl": "https://webhook.n8n.cloud/webhook/nexora-lead-enrichment",
-      "status": "active",
-      "executionsCount": 247,
-      "failedCount": 2,
-      "lastTriggeredAt": "2026-10-13T22:05:03.513Z",
-      "description": "Dispara enriquecimento de dados via webhook e pontua o lead com a IA imediatamente ao cadastrar."
-    },
-    {
-      "id": "auto_002",
-      "companyId": "comp_nexora_main",
-      "name": "Alerta de Oportunidade em Negociação para Vendedor",
-      "triggerType": "lead_stage_changed",
-      "actionType": "send_alert",
-      "webhookUrl": "https://api.nexora.ai/internal-notify",
-      "status": "active",
-      "executionsCount": 69,
-      "failedCount": 1,
-      "lastTriggeredAt": "2026-10-13T23:05:33.117Z",
-      "description": "Envia lembrete prioritário de follow-up quando o lead entra na fase de Proposta ou Negociação."
-    },
-    {
-      "id": "auto_003",
-      "companyId": "comp_nexora_main",
-      "name": "Sincronização com Ferramenta de Automação (Make/Zapier)",
-      "triggerType": "deal_closed_won",
-      "actionType": "webhook_make",
-      "webhookUrl": "https://hook.eu1.make.com/nexora-contract-won",
-      "status": "active",
-      "executionsCount": 31,
-      "failedCount": 1,
-      "lastTriggeredAt": "2026-10-12T23:05:03.513Z",
-      "description": "Emite ordem de serviço e cria canal de boas-vindas automático para o novo cliente fechado."
-    }
-  ],
-  "executionLogs": [
-    {
-      "id": "log_1791932733117_ljhgc",
-      "automationId": "auto_002",
-      "companyId": "comp_nexora_main",
-      "timestamp": "2026-10-13T23:05:33.117Z",
-      "status": "error",
-      "statusCode": 500,
-      "durationMs": 162,
-      "payload": {
-        "event": "lead_stage_changed",
-        "automationId": "auto_002",
-        "automationName": "Alerta de Oportunidade em Negociação para Vendedor",
-        "timestamp": "2026-10-13T23:05:32.955Z",
-        "companyId": "comp_nexora_main",
-        "testData": {
-          "lead": {
-            "name": "Lead de Teste NEXORA",
-            "email": "teste@nexora.ai",
-            "phone": "+55 11 99999-8888",
-            "score": 95
-          }
-        }
-      },
-      "responseSummary": "Falha ao conectar com https://api.nexora.ai/internal-notify: fetch failed"
-    },
-    {
-      "id": "log_001",
-      "automationId": "auto_001",
-      "companyId": "comp_nexora_main",
-      "timestamp": "2026-10-13T22:05:03.513Z",
-      "status": "success",
-      "statusCode": 200,
-      "durationMs": 412,
-      "payload": {
-        "leadId": "lead_001",
-        "name": "Rafael Valente",
-        "score": 92
-      },
-      "responseSummary": "Webhook n8n processado com sucesso. Lead enriquecido."
-    },
-    {
-      "id": "log_002",
-      "automationId": "auto_001",
-      "companyId": "comp_nexora_main",
-      "timestamp": "2026-10-13T18:05:03.513Z",
-      "status": "success",
-      "statusCode": 200,
-      "durationMs": 388,
-      "payload": {
-        "leadId": "lead_002",
-        "name": "Juliana Siqueira",
-        "score": 88
-      },
-      "responseSummary": "Webhook n8n processado com sucesso. Dados enviados."
-    },
-    {
-      "id": "log_003",
-      "automationId": "auto_003",
-      "companyId": "comp_nexora_main",
-      "timestamp": "2026-10-12T23:05:03.513Z",
-      "status": "error",
-      "statusCode": 504,
-      "durationMs": 3000,
-      "payload": {
-        "leadId": "lead_005",
-        "value": 62000
-      },
-      "responseSummary": "Gateway Timeout ao contatar o servidor Make."
-    }
-  ],
+  "invites": {},
+  "manualProgress": {},
+  "leads": [],
+  "leadInteractions": [],
+  "marketingPlans": [],
+  "contentItems": [],
+  "campaigns": [],
+  "automations": [],
+  "executionLogs": [],
+  "payments": [],
   "plansConfig": [
     {
       "id": "starter",
       "name": "Starter",
       "priceMonthly": 197,
       "priceYearly": 1970,
+      "periodicity": "monthly",
+      "status": "active",
       "description": "Ideal para profissionais autônomos e pequenas empresas iniciando em IA e marketing.",
       "leadsLimit": 500,
       "aiCredits": 1000,
@@ -699,14 +80,21 @@
         "Estúdio de conteúdo (até 30 posts/mês)",
         "Gestão de campanhas manuais",
         "Exportação em CSV",
-        "Suporte via e-mail"
-      ]
+        "Suporte via e-mail",
+        "Capítulos 1 e 2 do Manual de Crescimento"
+      ],
+      "modules": ["crm", "ai-hub", "content", "campaigns", "manual"],
+      "manualChapters": ["cap-1", "cap-2"],
+      "allowPix": true,
+      "allowInstallments": true
     },
     {
       "id": "pro",
       "name": "Pro Growth",
       "priceMonthly": 497,
       "priceYearly": 4970,
+      "periodicity": "monthly",
+      "status": "active",
       "popular": true,
       "description": "Para empresas em expansão que demandam automação, inteligência avançada e CRM robusto.",
       "leadsLimit": 5000,
@@ -721,14 +109,20 @@
         "Estúdio de conteúdo com calendário editorial completo",
         "Gestão integrada de campanhas de anúncios",
         "Relatórios de ROI e conversão comercial",
-        "Controle de privacidade compatível com LGPD"
-      ]
+        "Capítulos 1 a 4 do Manual de Crescimento"
+      ],
+      "modules": ["crm", "ai-hub", "content", "campaigns", "automations", "reports", "manual"],
+      "manualChapters": ["cap-1", "cap-2", "cap-3", "cap-4"],
+      "allowPix": true,
+      "allowInstallments": true
     },
     {
       "id": "business",
       "name": "Enterprise Business",
       "priceMonthly": 1297,
       "priceYearly": 12970,
+      "periodicity": "monthly",
+      "status": "active",
       "description": "A solução definitiva para agências, holdings e empresas com múltiplas equipes e alto volume.",
       "leadsLimit": 50000,
       "aiCredits": 25000,
@@ -740,302 +134,25 @@
         "Webhooks dedicados de alta velocidade",
         "Análise estratégica completa com Gemini 3.8 Flash",
         "Auditoria administrativa e controle de permissões por perfil",
-        "Exportação avançada de dados",
-        "Acompanhamento de onboarding prioritário",
+        "Acesso integral e vitalício a TODOS os capítulos do Manual",
         "SLA de atendimento garantido"
-      ]
+      ],
+      "modules": ["crm", "ai-hub", "marketing", "content", "campaigns", "automations", "reports", "manual"],
+      "manualChapters": ["all"],
+      "allowPix": true,
+      "allowInstallments": true
     }
   ],
   "auditLogs": [
     {
-      "id": "audit_1791937134995_2cwjp6",
-      "timestamp": "2026-10-14T00:18:54.995Z",
-      "actorEmail": "lucas@nexusecom.com.br",
-      "actorRole": "admin",
-      "companyId": "comp_nexus_digital",
-      "action": "LOGIN_SUCCESS",
+      "id": "audit_clean_001",
+      "timestamp": "2026-10-14T00:25:00.000Z",
+      "actorEmail": "admin@nexora.ai",
+      "actorRole": "owner",
+      "companyId": "comp_nexora_main",
+      "action": "SYSTEM_INITIALIZED",
       "ipAddress": "127.0.0.1",
-      "details": "Login efetuado com sucesso."
-    },
-    {
-      "id": "audit_1791937134978_74663q",
-      "timestamp": "2026-10-14T00:18:54.978Z",
-      "actorEmail": "mariana@clinicalumina.com.br",
-      "actorRole": "admin",
-      "companyId": "comp_lumina_saude",
-      "action": "LOGIN_SUCCESS",
-      "ipAddress": "127.0.0.1",
-      "details": "Login efetuado com sucesso."
-    },
-    {
-      "id": "audit_1791937134882_tx6we6",
-      "timestamp": "2026-10-14T00:18:54.882Z",
-      "actorEmail": "admin@nexora.ai",
-      "actorRole": "owner",
-      "companyId": "comp_nexora_main",
-      "action": "LOGIN_SUCCESS",
-      "ipAddress": "127.0.0.1",
-      "details": "Login efetuado com sucesso."
-    },
-    {
-      "id": "audit_1791937091823_ilhhno",
-      "timestamp": "2026-10-14T00:18:11.823Z",
-      "actorEmail": "lucas@nexusecom.com.br",
-      "actorRole": "admin",
-      "companyId": "comp_nexus_digital",
-      "action": "LOGIN_SUCCESS",
-      "ipAddress": "127.0.0.1",
-      "details": "Login efetuado com sucesso."
-    },
-    {
-      "id": "audit_1791937091807_yjmcyg",
-      "timestamp": "2026-10-14T00:18:11.807Z",
-      "actorEmail": "mariana@clinicalumina.com.br",
-      "actorRole": "admin",
-      "companyId": "comp_lumina_saude",
-      "action": "LOGIN_SUCCESS",
-      "ipAddress": "127.0.0.1",
-      "details": "Login efetuado com sucesso."
-    },
-    {
-      "id": "audit_1791937091727_6scg2y",
-      "timestamp": "2026-10-14T00:18:11.727Z",
-      "actorEmail": "admin@nexora.ai",
-      "actorRole": "owner",
-      "companyId": "comp_nexora_main",
-      "action": "LOGIN_SUCCESS",
-      "ipAddress": "127.0.0.1",
-      "details": "Login efetuado com sucesso."
-    },
-    {
-      "id": "audit_1791937056533_mdfjbz",
-      "timestamp": "2026-10-14T00:17:36.533Z",
-      "actorEmail": "aliferstreaming@gmail.com",
-      "actorRole": "admin",
-      "companyId": "comp_1791936943136_mxvav",
-      "action": "LOGIN_SUCCESS",
-      "ipAddress": "2804:1b3:a283:af12:dda5:a6d6:6b27:9d53, 169.254.169.126",
-      "details": "Login efetuado com sucesso."
-    },
-    {
-      "id": "audit_1791936943139_tgkw4a",
-      "timestamp": "2026-10-14T00:15:43.139Z",
-      "actorEmail": "aliferstreaming@gmail.com",
-      "actorRole": "admin",
-      "companyId": "comp_1791936943136_mxvav",
-      "action": "REGISTER_COMPANY",
-      "ipAddress": "2804:1b3:a283:af12:dda5:a6d6:6b27:9d53, 169.254.169.126",
-      "details": "Nova empresa criada: Streaming TV"
-    },
-    {
-      "id": "audit_1791935642671_f1j8e0",
-      "timestamp": "2026-10-13T23:54:02.671Z",
-      "actorEmail": "admin@nexora.ai",
-      "actorRole": "owner",
-      "companyId": "comp_nexora_main",
-      "action": "MARKETING_PLAN_CREATED",
-      "ipAddress": "2804:1b3:a283:af12:dda5:a6d6:6b27:9d53, 169.254.169.126",
-      "details": "Plano criado: Estratégia IA - 13/10/2026"
-    },
-    {
-      "id": "audit_1791935639167_x043oh",
-      "timestamp": "2026-10-13T23:53:59.167Z",
-      "actorEmail": "admin@nexora.ai",
-      "actorRole": "owner",
-      "companyId": "comp_nexora_main",
-      "action": "AI_EXECUTION",
-      "ipAddress": "2804:1b3:a283:af12:dda5:a6d6:6b27:9d53, 169.254.169.126",
-      "details": "Execução da ferramenta de IA: text-summarizer"
-    },
-    {
-      "id": "audit_1791935568845_rul0er",
-      "timestamp": "2026-10-13T23:52:48.845Z",
-      "actorEmail": "admin@nexora.ai",
-      "actorRole": "owner",
-      "companyId": "comp_nexora_main",
-      "action": "AI_EXECUTION",
-      "ipAddress": "2804:1b3:a283:af12:dda5:a6d6:6b27:9d53, 169.254.169.126",
-      "details": "Execução da ferramenta de IA: marketing-assistant"
-    },
-    {
-      "id": "audit_1791935526342_semwe3",
-      "timestamp": "2026-10-13T23:52:06.342Z",
-      "actorEmail": "admin@nexora.ai",
-      "actorRole": "owner",
-      "companyId": "comp_nexora_main",
-      "action": "MARKETING_PLAN_CREATED",
-      "ipAddress": "2804:1b3:a283:af12:dda5:a6d6:6b27:9d53, 169.254.169.126",
-      "details": "Plano criado: Estratégia IA - 13/10/2026"
-    },
-    {
-      "id": "audit_1791935470063_mm8cgb",
-      "timestamp": "2026-10-13T23:51:10.063Z",
-      "actorEmail": "admin@nexora.ai",
-      "actorRole": "owner",
-      "companyId": "comp_nexora_main",
-      "action": "AI_EXECUTION",
-      "ipAddress": "2804:1b3:a283:af12:dda5:a6d6:6b27:9d53, 169.254.169.126",
-      "details": "Execução da ferramenta de IA: customer-service"
-    },
-    {
-      "id": "audit_1791935385386_5wzsz9",
-      "timestamp": "2026-10-13T23:49:45.386Z",
-      "actorEmail": "admin@nexora.ai",
-      "actorRole": "owner",
-      "companyId": "comp_nexora_main",
-      "action": "AI_EXECUTION",
-      "ipAddress": "2804:1b3:a283:af12:dda5:a6d6:6b27:9d53, 169.254.169.126",
-      "details": "Execução da ferramenta de IA: content-studio"
-    },
-    {
-      "id": "audit_1791935327333_v28e62",
-      "timestamp": "2026-10-13T23:48:47.333Z",
-      "actorEmail": "admin@nexora.ai",
-      "actorRole": "owner",
-      "companyId": "comp_nexora_main",
-      "action": "MARKETING_PLAN_CREATED",
-      "ipAddress": "2804:1b3:a283:af12:dda5:a6d6:6b27:9d53, 169.254.169.126",
-      "details": "Plano criado: Estratégia IA - 13/10/2026"
-    },
-    {
-      "id": "audit_1791935025117_1s8txb",
-      "timestamp": "2026-10-13T23:43:45.117Z",
-      "actorEmail": "admin@nexora.ai",
-      "actorRole": "owner",
-      "companyId": "comp_nexora_main",
-      "action": "AI_EXECUTION",
-      "ipAddress": "2804:1b3:a283:af12:dda5:a6d6:6b27:9d53, 169.254.169.126",
-      "details": "Execução da ferramenta de IA: sales-assistant"
-    },
-    {
-      "id": "audit_1791934988034_faw6mg",
-      "timestamp": "2026-10-13T23:43:08.034Z",
-      "actorEmail": "admin@nexora.ai",
-      "actorRole": "owner",
-      "companyId": "comp_nexora_main",
-      "action": "MARKETING_PLAN_CREATED",
-      "ipAddress": "2804:1b3:a283:af12:dda5:a6d6:6b27:9d53, 169.254.169.126",
-      "details": "Plano criado: Estratégia IA - 13/10/2026"
-    },
-    {
-      "id": "audit_1791934981528_ss0y6w",
-      "timestamp": "2026-10-13T23:43:01.528Z",
-      "actorEmail": "admin@nexora.ai",
-      "actorRole": "owner",
-      "companyId": "comp_nexora_main",
-      "action": "AI_EXECUTION",
-      "ipAddress": "2804:1b3:a283:af12:dda5:a6d6:6b27:9d53, 169.254.169.126",
-      "details": "Execução da ferramenta de IA: business-analysis"
-    },
-    {
-      "id": "audit_1791934875677_8thwwf",
-      "timestamp": "2026-10-13T23:41:15.677Z",
-      "actorEmail": "admin@nexora.ai",
-      "actorRole": "owner",
-      "companyId": "comp_nexora_main",
-      "action": "AI_EXECUTION",
-      "ipAddress": "2804:1b3:a283:af12:dda5:a6d6:6b27:9d53, 169.254.169.126",
-      "details": "Execução da ferramenta de IA: business-analysis"
-    },
-    {
-      "id": "audit_1791934483503_xx6hsi",
-      "timestamp": "2026-10-13T23:34:43.503Z",
-      "actorEmail": "admin@nexora.ai",
-      "actorRole": "owner",
-      "companyId": "comp_nexora_main",
-      "action": "LOGIN_SUCCESS",
-      "ipAddress": "2804:1b3:a283:af12:dda5:a6d6:6b27:9d53, 169.254.169.126",
-      "details": "Login efetuado com sucesso."
-    },
-    {
-      "id": "audit_1791932956104_s83pwf",
-      "timestamp": "2026-10-13T23:09:16.104Z",
-      "actorEmail": "admin@nexora.ai",
-      "actorRole": "owner",
-      "companyId": "comp_nexora_main",
-      "action": "LOGIN_SUCCESS",
-      "ipAddress": "2804:18:18bc:e645:6d27:6465:be90:ddfb, 169.254.169.126",
-      "details": "Login efetuado com sucesso."
-    },
-    {
-      "id": "audit_1791932732937_weovw6",
-      "timestamp": "2026-10-13T23:05:32.937Z",
-      "actorEmail": "admin@nexora.ai",
-      "actorRole": "owner",
-      "companyId": "comp_nexora_main",
-      "action": "LOGIN_SUCCESS",
-      "ipAddress": "127.0.0.1",
-      "details": "Login efetuado com sucesso."
-    },
-    {
-      "id": "audit_1791932732494_hcsxi7",
-      "timestamp": "2026-10-13T23:05:32.494Z",
-      "actorEmail": "admin@nexora.ai",
-      "actorRole": "owner",
-      "companyId": "comp_nexora_main",
-      "action": "AI_EXECUTION",
-      "ipAddress": "127.0.0.1",
-      "details": "Execução da ferramenta de IA: marketing-assistant"
-    },
-    {
-      "id": "audit_1791932717362_3dfr41",
-      "timestamp": "2026-10-13T23:05:17.362Z",
-      "actorEmail": "admin@nexora.ai",
-      "actorRole": "owner",
-      "companyId": "comp_nexora_main",
-      "action": "LOGIN_SUCCESS",
-      "ipAddress": "127.0.0.1",
-      "details": "Login efetuado com sucesso."
-    },
-    {
-      "id": "audit_1791932712581_dyehjs",
-      "timestamp": "2026-10-13T23:05:12.581Z",
-      "actorEmail": "admin@nexora.ai",
-      "actorRole": "owner",
-      "companyId": "comp_nexora_main",
-      "action": "LOGIN_SUCCESS",
-      "ipAddress": "127.0.0.1",
-      "details": "Login efetuado com sucesso."
-    },
-    {
-      "id": "audit_1791932709145_fu955x",
-      "timestamp": "2026-10-13T23:05:09.145Z",
-      "actorEmail": "admin@nexora.ai",
-      "actorRole": "owner",
-      "companyId": "comp_nexora_main",
-      "action": "LOGIN_SUCCESS",
-      "ipAddress": "127.0.0.1",
-      "details": "Login efetuado com sucesso."
-    },
-    {
-      "id": "audit_001",
-      "timestamp": "2026-10-13T21:05:03.513Z",
-      "actorEmail": "admin@nexora.ai",
-      "actorRole": "owner",
-      "companyId": "comp_nexora_main",
-      "action": "LOGIN_SUCCESS",
-      "ipAddress": "177.136.24.10",
-      "details": "Acesso autenticado ao painel administrativo do proprietário."
-    },
-    {
-      "id": "audit_002",
-      "timestamp": "2026-10-13T21:35:03.513Z",
-      "actorEmail": "admin@nexora.ai",
-      "actorRole": "owner",
-      "companyId": "comp_nexora_main",
-      "action": "LEAD_SCORE_UPDATE",
-      "ipAddress": "177.136.24.10",
-      "details": "Recalculada pontuação de IA para lead_001 (Pontuação: 92/100)."
-    },
-    {
-      "id": "audit_003",
-      "timestamp": "2026-10-13T22:05:03.513Z",
-      "actorEmail": "lucas@nexusecom.com.br",
-      "actorRole": "admin",
-      "companyId": "comp_nexus_digital",
-      "action": "CAMPAIGN_UPDATE",
-      "ipAddress": "189.28.14.88",
-      "details": "Orçamento de campanha Meta Ads ajustado para R$ 12.000."
+      "details": "Base de dados preparada para produção real. Contas demonstrativas removidas e backup gerado."
     }
   ]
 }

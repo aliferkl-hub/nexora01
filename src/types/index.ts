@@ -9,18 +9,22 @@ export interface User {
   createdAt: string;
 }
 
-export type CompanyPlan = 'starter' | 'pro' | 'business';
-export type CompanyStatus = 'active' | 'trial' | 'suspended';
+export type CompanyPlan = string;
+export type CompanyStatus = 'active' | 'trial' | 'pending' | 'suspended' | 'terminated';
 
 export interface Company {
   id: string;
   name: string;
   slug: string;
-  plan: CompanyPlan;
+  plan: string;
   status: CompanyStatus;
   cnpj?: string;
   industry?: string;
   phone?: string;
+  contactName?: string;
+  contactEmail?: string;
+  paymentStatus?: PaymentStatus;
+  activatedAt?: string;
   createdAt: string;
 }
 
@@ -151,11 +155,51 @@ export interface ExecutionLog {
   responseSummary: string;
 }
 
+export type PaymentStatus = 'PENDENTE' | 'EM_ANALISE' | 'APROVADO' | 'RECUSADO' | 'CANCELADO';
+export type PaymentMethod = 'PIX' | 'CARTAO_PARCELADO';
+
+export interface PaymentTransaction {
+  id: string;
+  companyId: string;
+  companyName: string;
+  userId: string;
+  userName: string;
+  userEmail: string;
+  planId: string;
+  planName: string;
+  amount: number;
+  billingCycle: 'monthly' | 'yearly';
+  method: PaymentMethod;
+  status: PaymentStatus;
+  pixKey: string;
+  pixBeneficiary: string;
+  receiptDetails?: string;
+  customerNotes?: string;
+  adminNotes?: string;
+  decisionBy?: string;
+  decisionAt?: string;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface CompanyInvite {
+  token: string;
+  companyId: string;
+  companyName: string;
+  email: string;
+  name: string;
+  role: UserRole;
+  expiresAt: number;
+  createdAt: string;
+}
+
 export interface PlanConfig {
   id: string;
   name: string;
   priceMonthly: number;
   priceYearly: number;
+  periodicity?: 'monthly' | 'yearly' | 'trial' | 'custom';
+  status?: 'active' | 'inactive' | 'archived';
   popular?: boolean;
   description: string;
   leadsLimit: number;
@@ -163,6 +207,11 @@ export interface PlanConfig {
   automationsLimit: number;
   usersLimit: number;
   features: string[];
+  modules?: string[];
+  manualChapters?: string[];
+  allowPix?: boolean;
+  allowInstallments?: boolean;
+  companiesCount?: number;
 }
 
 export interface AuditLog {

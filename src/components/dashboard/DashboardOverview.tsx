@@ -289,20 +289,24 @@ export const DashboardOverview: React.FC<DashboardOverviewProps> = ({ onNavigate
 
           {/* Clean SVG Interactive Chart */}
           <div className="h-64 flex items-end gap-4 pt-4 pb-2 px-2 border-b border-slate-800">
-            {leadEvolution.map((item, index) => {
-              const maxPipeline = Math.max(...leadEvolution.map((x) => x.pipeline), 50000);
-              const heightPercent = Math.max(12, Math.round((item.pipeline / maxPipeline) * 100));
+            {leadEvolution.map((item) => {
+              const maxPipeline = Math.max(...leadEvolution.map((x) => x.pipeline), 1);
+              const heightPercent = item.pipeline > 0 ? Math.max(8, Math.round((item.pipeline / maxPipeline) * 100)) : 0;
 
               return (
                 <div key={item.month} className="flex-1 flex flex-col items-center gap-2 h-full justify-end group">
                   <div className="opacity-0 group-hover:opacity-100 transition-opacity text-[10px] bg-slate-900 border border-slate-700 px-2 py-1 rounded text-white font-mono pointer-events-none mb-1 text-center whitespace-nowrap shadow-lg">
                     R$ {item.pipeline.toLocaleString('pt-BR')} • {item.leads} leads
                   </div>
-                  <div className="w-full max-w-[48px] bg-slate-800/60 rounded-t-lg overflow-hidden flex flex-col justify-end h-full">
-                    <div
-                      style={{ height: `${heightPercent}%` }}
-                      className="w-full bg-gradient-to-t from-blue-600 via-indigo-600 to-cyan-400 rounded-t-lg transition-all duration-500 group-hover:brightness-125"
-                    />
+                  <div className="w-full max-w-[48px] bg-slate-800/40 rounded-t-lg overflow-hidden flex flex-col justify-end h-full">
+                    {heightPercent > 0 ? (
+                      <div
+                        style={{ height: `${heightPercent}%` }}
+                        className="w-full bg-gradient-to-t from-blue-600 via-indigo-600 to-cyan-400 rounded-t-lg transition-all duration-500 group-hover:brightness-125"
+                      />
+                    ) : (
+                      <div className="w-full h-1 bg-slate-800 rounded-full" />
+                    )}
                   </div>
                   <span className="text-[11px] font-mono text-slate-400 mt-2">{item.month}</span>
                 </div>
@@ -311,10 +315,16 @@ export const DashboardOverview: React.FC<DashboardOverviewProps> = ({ onNavigate
           </div>
 
           <div className="flex items-center justify-between text-xs text-slate-400 mt-4">
-            <span className="flex items-center gap-1 text-emerald-400 font-medium">
-              <TrendingUp className="w-3.5 h-3.5" />
-              <span>Taxa média de crescimento do pipeline: +34% ao mês</span>
-            </span>
+            {kpis.totalLeads > 0 ? (
+              <span className="flex items-center gap-1 text-emerald-400 font-medium">
+                <TrendingUp className="w-3.5 h-3.5" />
+                <span>Dados reais apurados do pipeline comercial</span>
+              </span>
+            ) : (
+              <span className="text-slate-500 text-[11px]">
+                Nenhum lead cadastrado ainda no período selecionado.
+              </span>
+            )}
             <button
               onClick={() => onNavigate('reports')}
               className="text-cyan-400 hover:underline text-xs flex items-center gap-1"
@@ -418,7 +428,9 @@ export const DashboardOverview: React.FC<DashboardOverviewProps> = ({ onNavigate
 
           {filteredRecentLeads.length === 0 ? (
             <div className="text-center py-8 text-slate-500 text-xs">
-              Nenhum lead encontrado com o termo digitado.
+              {recentLeads.length === 0
+                ? 'Nenhum lead cadastrado ainda nesta empresa. Clique em "+ Novo Lead" para começar.'
+                : 'Nenhum lead encontrado com o termo digitado.'}
             </div>
           ) : (
             <div className="overflow-x-auto">

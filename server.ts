@@ -41,7 +41,6 @@ function verifyPassword(password: string, hash: string, salt: string): boolean {
 function getInitialDb() {
   const defaultSalt = 'nexora_secure_salt_2026';
   const ownerHash = crypto.pbkdf2Sync('Nexora@2026!', defaultSalt, 1000, 64, 'sha512').toString('hex');
-  const userHash = crypto.pbkdf2Sync('Senha123!', defaultSalt, 1000, 64, 'sha512').toString('hex');
 
   return {
     companies: [
@@ -50,35 +49,31 @@ function getInitialDb() {
         name: 'Nexora AI Hub (Matriz)',
         slug: 'nexora-ai',
         plan: 'business',
-        status: 'active',
+        status: 'active' as 'active' | 'trial' | 'pending' | 'suspended' | 'terminated',
         cnpj: '48.910.123/0001-90',
         industry: 'Tecnologia & Marketing Digital',
         phone: '+55 (11) 98822-1000',
+        contactName: 'Alifer Madeiro',
+        contactEmail: 'admin@nexora.ai',
+        activatedAt: new Date().toISOString(),
+        paymentStatus: 'APROVADO',
         createdAt: new Date().toISOString(),
-      },
-      {
-        id: 'comp_nexus_digital',
-        name: 'Nexus E-Commerce Tech',
-        slug: 'nexus-digital',
-        plan: 'pro',
-        status: 'active',
-        cnpj: '33.456.789/0001-12',
-        industry: 'Comércio Eletrônico & Varejo',
-        phone: '+55 (21) 97123-4567',
-        createdAt: new Date(Date.now() - 30 * 86400000).toISOString(),
-      },
-      {
-        id: 'comp_lumina_saude',
-        name: 'Clínica Lumina Saúde & Estética',
-        slug: 'lumina-saude',
-        plan: 'starter',
-        status: 'trial',
-        cnpj: '19.876.543/0001-44',
-        industry: 'Saúde e Bem-estar',
-        phone: '+55 (31) 99876-5432',
-        createdAt: new Date(Date.now() - 10 * 86400000).toISOString(),
       }
-    ],
+    ] as Array<{
+      id: string;
+      name: string;
+      slug: string;
+      plan: string;
+      status: 'active' | 'trial' | 'pending' | 'suspended' | 'terminated';
+      cnpj?: string;
+      industry?: string;
+      phone?: string;
+      contactName?: string;
+      contactEmail?: string;
+      activatedAt?: string;
+      paymentStatus?: string;
+      createdAt: string;
+    }>,
     users: [
       {
         id: 'usr_owner_01',
@@ -86,357 +81,62 @@ function getInitialDb() {
         email: 'admin@nexora.ai',
         passwordHash: ownerHash,
         passwordSalt: defaultSalt,
-        role: 'owner', // owner, admin, specialist, viewer
+        role: 'owner' as 'owner' | 'admin' | 'specialist' | 'viewer',
         companyId: 'comp_nexora_main',
         createdAt: new Date().toISOString(),
-      },
-      {
-        id: 'usr_nexus_admin',
-        name: 'Lucas Mendes',
-        email: 'lucas@nexusecom.com.br',
-        passwordHash: userHash,
-        passwordSalt: defaultSalt,
-        role: 'admin',
-        companyId: 'comp_nexus_digital',
-        createdAt: new Date().toISOString(),
-      },
-      {
-        id: 'usr_lumina_admin',
-        name: 'Dra. Mariana Costa',
-        email: 'mariana@clinicalumina.com.br',
-        passwordHash: userHash,
-        passwordSalt: defaultSalt,
-        role: 'admin',
-        companyId: 'comp_lumina_saude',
-        createdAt: new Date().toISOString(),
-      }
-    ],
-    sessions: {} as Record<string, { userId: string; companyId: string; expiresAt: number }>,
-    resetTokens: {} as Record<string, { email: string; expiresAt: number }>,
-    manualProgress: {} as Record<string, { completedChapters: string[]; checkedItems: string[]; lastActiveChapterId?: string }>,
-    leads: [
-      {
-        id: 'lead_001',
-        companyId: 'comp_nexora_main',
-        name: 'Rafael Valente',
-        companyName: 'Valente Logística & Frotas',
-        email: 'rafael@valentelog.com.br',
-        phone: '+55 11 98452-1100',
-        stage: 'negotiation', // new, contact, qualified, proposal, negotiation, closed_won, closed_lost
-        opportunityValue: 24500,
-        source: 'Google Ads',
-        aiScore: 92,
-        aiQualification: 'Lead com alto faturamento, demanda urgente de automação de pós-venda e orçamento aprovado.',
-        nextAction: 'Apresentar proposta técnica comercial via Meet',
-        nextActionDate: '2026-10-16',
-        lgpdConsent: true,
-        lgpdConsentDate: new Date().toISOString(),
-        tags: ['Empresa Grande', 'Automação', 'Urgente'],
-        createdAt: new Date(Date.now() - 5 * 86400000).toISOString(),
-      },
-      {
-        id: 'lead_002',
-        companyId: 'comp_nexora_main',
-        name: 'Juliana Siqueira',
-        companyName: 'Fintech Aurora Pay',
-        email: 'juliana.s@aurorapay.io',
-        phone: '+55 11 97722-4433',
-        stage: 'proposal',
-        opportunityValue: 48000,
-        source: 'LinkedIn Inbound',
-        aiScore: 88,
-        aiQualification: 'Interesse em IA para triagem de suporte e integração via webhooks com CRM interno.',
-        nextAction: 'Enviar minuta de contrato com SLA',
-        nextActionDate: '2026-10-15',
-        lgpdConsent: true,
-        lgpdConsentDate: new Date().toISOString(),
-        tags: ['Fintech', 'SaaS', 'API'],
-        createdAt: new Date(Date.now() - 8 * 86400000).toISOString(),
-      },
-      {
-        id: 'lead_003',
-        companyId: 'comp_nexora_main',
-        name: 'Eduardo Brandão',
-        companyName: 'Rede Farma Express',
-        email: 'eduardo@farmaexpress.com',
-        phone: '+55 41 99123-8877',
-        stage: 'qualified',
-        opportunityValue: 15000,
-        source: 'Meta Ads',
-        aiScore: 74,
-        aiQualification: 'Potencial médio, quer validar campanha de captação local antes de expandir.',
-        nextAction: 'Enviar caso de sucesso de varejo farmacêutico',
-        nextActionDate: '2026-10-18',
-        lgpdConsent: true,
-        lgpdConsentDate: new Date().toISOString(),
-        tags: ['Varejo', 'Tráfego Pago'],
-        createdAt: new Date(Date.now() - 3 * 86400000).toISOString(),
-      },
-      {
-        id: 'lead_004',
-        companyId: 'comp_nexora_main',
-        name: 'Camila Rocha',
-        companyName: 'Studio Arquitetura Contemporânea',
-        email: 'camila@rochaarquitetura.com',
-        phone: '+55 31 98844-3210',
-        stage: 'new',
-        opportunityValue: 9800,
-        source: 'Website Form',
-        aiScore: 65,
-        aiQualification: 'Lead inbound recente solicitando consultoria de marketing de diferenciação.',
-        nextAction: 'Realizar primeiro contato via WhatsApp',
-        nextActionDate: '2026-10-14',
-        lgpdConsent: true,
-        lgpdConsentDate: new Date().toISOString(),
-        tags: ['Novo Lead', 'Arquitetura'],
-        createdAt: new Date(Date.now() - 1 * 86400000).toISOString(),
-      },
-      {
-        id: 'lead_005',
-        companyId: 'comp_nexora_main',
-        name: 'Rodrigo Alencar',
-        companyName: 'Alencar Agro Indústria',
-        email: 'rodrigo@alencaragro.com.br',
-        phone: '+55 65 99988-1234',
-        stage: 'closed_won',
-        opportunityValue: 62000,
-        source: 'Indicação',
-        aiScore: 98,
-        aiQualification: 'Contrato anual fechado. Projeto de expansão nacional com tráfego e IA.',
-        nextAction: 'Onboarding de implantação da equipe',
-        nextActionDate: '2026-10-14',
-        lgpdConsent: true,
-        lgpdConsentDate: new Date().toISOString(),
-        tags: ['Cliente Ativo', 'Contrato Anual'],
-        createdAt: new Date(Date.now() - 20 * 86400000).toISOString(),
-      }
-    ],
-    leadInteractions: [
-      {
-        id: 'inter_001',
-        leadId: 'lead_001',
-        type: 'meeting',
-        summary: 'Reunião de Diagnóstico com diretoria',
-        notes: 'Discutimos os principais gargalos no fechamento de orçamentos. Solicitaram proposta até sexta.',
-        createdAt: new Date(Date.now() - 2 * 86400000).toISOString(),
-      },
-      {
-        id: 'inter_002',
-        leadId: 'lead_002',
-        type: 'email',
-        summary: 'Envio do escopo de arquitetura de automação',
-        notes: 'Enviado fluxograma do n8n integrado com CRM e disparador de IA.',
-        createdAt: new Date(Date.now() - 4 * 86400000).toISOString(),
-      }
-    ],
-    marketingPlans: [
-      {
-        id: 'plan_001',
-        companyId: 'comp_nexora_main',
-        title: 'Estratégia de Aquisição B2B Q4 — Nexora Growth',
-        targetAudience: 'CEOs, Diretores Comerciais e Fundadores de empresas com faturamento entre R$ 2M e R$ 20M/ano.',
-        valueProposition: 'Multiplique a capacidade de vendas da sua empresa combinando Inteligência Artificial preditiva, automação com n8n e campanhas de alta conversão.',
-        positioning: 'A plataforma definitiva que une o cérebro da IA com a força operacional de marketing e CRM.',
-        goals: [
-          'Gerar 150 MQLs qualificados por mês',
-          'Alcançar CAC inferior a R$ 380,00',
-          'Atingir R$ 250.000 de novo pipeline no trimestre'
-        ],
-        actions: [
-          { id: 'act_1', title: 'Lançamento de Campanha de Tráfego Direto no LinkedIn Ads', priority: 'high', deadline: '2026-10-25', status: 'in_progress' },
-          { id: 'act_2', title: 'Produção de 12 Artigos Profundos sobre IA Aplicada a Negócios', priority: 'medium', deadline: '2026-11-10', status: 'pending' },
-          { id: 'act_3', title: 'Automação de Enriquecimento de Leads com IA em Tempo Real', priority: 'high', deadline: '2026-10-20', status: 'completed' },
-          { id: 'act_4', title: 'Webinar Comercial Exclusivo: O Futuro das Empresas com IA', priority: 'high', deadline: '2026-11-05', status: 'pending' }
-        ],
-        version: 2,
-        updatedAt: new Date().toISOString(),
-      }
-    ],
-    contentItems: [
-      {
-        id: 'content_001',
-        companyId: 'comp_nexora_main',
-        platform: 'linkedin',
-        title: 'Como a IA generativa está redefinindo o CAC em empresas B2B',
-        category: 'Artigo & Post Carrossel',
-        tone: 'Profissional, analítico e provocativo',
-        body: 'A maioria das empresas ainda usa IA apenas como corretor ortográfico. Aquelas que estão escalando usam agentes para qualificar leads em 2 minutos e calibrar campanhas de tráfego em tempo real.\n\nNos últimos 90 dias analisamos mais de 450 operações comerciais. O padrão que separa empresas que crescem daquelas estagnadas se resume a 3 pilares:\n\n1. Tempo de resposta: responder em menos de 5 min multiplica a conversão em 7x.\n2. Personalização em escala com agentes dedicados.\n3. Integração total entre tráfego e pipeline CRM.\n\nSua equipe ainda perde horas com tarefas operacionais manuais?',
-        hashtags: ['#InteligenciaArtificial', '#GrowthMarketing', '#VendasB2B', '#NexoraAI'],
-        status: 'published',
-        scheduledDate: '2026-10-12T10:00:00Z',
-        createdAt: new Date(Date.now() - 4 * 86400000).toISOString(),
-      },
-      {
-        id: 'content_002',
-        companyId: 'comp_nexora_main',
-        platform: 'instagram',
-        title: 'Bastidores: 5 automações que você precisa rodar no seu negócio hoje',
-        category: 'Reels / Vídeo Curto',
-        tone: 'Dinâmico, direto e inspirador',
-        body: 'Roteiro de vídeo para Reels/TikTok:\n[Cena 1 - Gancho]: Se você ainda responde clientes manualmente às 23h, está perdendo dinheiro todos os dias.\n[Cena 2 - Problema]: O cliente quer resposta instantânea. Se demorar 10 minutos, ele já comprou do concorrente.\n[Cena 3 - Solução]: Com a NEXORA AI, o webhook aciona a triagem, agenda a reunião e atualiza o CRM automaticamente.\n[Cena 4 - CTA]: Comente "AUTOMACAO" para ver na prática.',
-        hashtags: ['#AutomacaoEmpresarial', '#MarketingDigital', '#VendasNoAutomatico'],
-        status: 'ready',
-        scheduledDate: '2026-10-15T18:00:00Z',
-        createdAt: new Date().toISOString(),
-      },
-      {
-        id: 'content_003',
-        companyId: 'comp_nexora_main',
-        platform: 'email',
-        title: 'Sequência de Nutrição: O Diagnóstico de Maturidade com IA',
-        category: 'E-mail Comercial',
-        tone: 'Consultivo e persuasivo',
-        body: 'Olá, {{primeiro_nome}}!\n\nQuando conversamos com gestores comerciais, a principal queixa é sempre a mesma: "nossos vendedores gastam 60% do dia preenchendo relatórios ao invés de vender".\n\nPreparamos uma demonstração personalizada mostrando como centralizar todo o seu fluxo comercial na plataforma NEXORA AI.\n\nPodemos bater um papo de 15 minutos nesta quinta-feira?',
-        hashtags: [],
-        status: 'draft',
-        scheduledDate: '2026-10-17T09:00:00Z',
-        createdAt: new Date().toISOString(),
-      }
-    ],
-    campaigns: [
-      {
-        id: 'camp_001',
-        companyId: 'comp_nexora_main',
-        name: 'Campanha Q4 — Escala com Inteligência Artificial',
-        platform: 'Meta Ads',
-        objective: 'Geração de Leads Qualificados',
-        status: 'active', // planning, active, paused, completed
-        budget: 12000,
-        spent: 4320,
-        impressions: 148500,
-        clicks: 4210,
-        conversions: 218,
-        cpa: 19.81,
-        roi: 4.8,
-        startDate: '2026-10-01',
-        endDate: '2026-10-31',
-        targetAudience: 'Empresários, Gestores de Tráfego, Diretores de PME (28-55 anos)',
-        creativeNotes: 'Criativo em vídeo escuro com detalhes em neon azul e demonstração da interface.',
-      },
-      {
-        id: 'camp_002',
-        companyId: 'comp_nexora_main',
-        name: 'Google Ads Search — Plataforma IA para Negócios',
-        platform: 'Google Ads',
-        objective: 'Tráfego Fundo de Funil & Vendas Diretas',
-        status: 'active',
-        budget: 9500,
-        spent: 3180,
-        impressions: 62400,
-        clicks: 2890,
-        conversions: 142,
-        cpa: 22.39,
-        roi: 5.2,
-        startDate: '2026-10-05',
-        endDate: '2026-10-31',
-        targetAudience: 'Pesquisas por: software crm com ia, automação de marketing b2b, plataforma nexora',
-        creativeNotes: 'Anúncios responsivos de pesquisa com sitelinks para Central de IA e Demonstração.',
-      },
-      {
-        id: 'camp_003',
-        companyId: 'comp_nexora_main',
-        name: 'LinkedIn Sponsored Content — Decisores C-Level',
-        platform: 'LinkedIn Ads',
-        objective: 'Reconhecimento & Oportunidades Enterprise',
-        status: 'planning',
-        budget: 15000,
-        spent: 0,
-        impressions: 0,
-        clicks: 0,
-        conversions: 0,
-        cpa: 0,
-        roi: 0,
-        startDate: '2026-10-20',
-        endDate: '2026-11-20',
-        targetAudience: 'Chief Marketing Officers, Chief Revenue Officers e Diretores de Inovação',
-        creativeNotes: 'Whitepaper: O Guia Executivo de Implementação de IA em Vendas 2026.',
-      }
-    ],
-    automations: [
-      {
-        id: 'auto_001',
-        companyId: 'comp_nexora_main',
-        name: 'Qualificação Instantânea de Lead & Notificação',
-        triggerType: 'new_lead',
-        actionType: 'webhook_n8n',
-        webhookUrl: 'https://webhook.n8n.cloud/webhook/nexora-lead-enrichment',
-        status: 'active', // active, paused, draft
-        executionsCount: 247,
-        failedCount: 2,
-        lastTriggeredAt: new Date(Date.now() - 3600000).toISOString() as string | null,
-        description: 'Dispara enriquecimento de dados via webhook e pontua o lead com a IA imediatamente ao cadastrar.',
-      },
-      {
-        id: 'auto_002',
-        companyId: 'comp_nexora_main',
-        name: 'Alerta de Oportunidade em Negociação para Vendedor',
-        triggerType: 'lead_stage_changed',
-        actionType: 'send_alert',
-        webhookUrl: 'https://api.nexora.ai/internal-notify',
-        status: 'active',
-        executionsCount: 68,
-        failedCount: 0,
-        lastTriggeredAt: new Date(Date.now() - 14400000).toISOString() as string | null,
-        description: 'Envia lembrete prioritário de follow-up quando o lead entra na fase de Proposta ou Negociação.',
-      },
-      {
-        id: 'auto_003',
-        companyId: 'comp_nexora_main',
-        name: 'Sincronização com Ferramenta de Automação (Make/Zapier)',
-        triggerType: 'deal_closed_won',
-        actionType: 'webhook_make',
-        webhookUrl: 'https://hook.eu1.make.com/nexora-contract-won',
-        status: 'active',
-        executionsCount: 31,
-        failedCount: 1,
-        lastTriggeredAt: new Date(Date.now() - 86400000).toISOString() as string | null,
-        description: 'Emite ordem de serviço e cria canal de boas-vindas automático para o novo cliente fechado.',
-      }
-    ],
-    executionLogs: [
-      {
-        id: 'log_001',
-        automationId: 'auto_001',
-        companyId: 'comp_nexora_main',
-        timestamp: new Date(Date.now() - 3600000).toISOString(),
-        status: 'success' as const,
-        statusCode: 200,
-        durationMs: 412,
-        payload: { leadId: 'lead_001', name: 'Rafael Valente', score: 92 } as any,
-        responseSummary: 'Webhook n8n processado com sucesso. Lead enriquecido.',
-      },
-      {
-        id: 'log_002',
-        automationId: 'auto_001',
-        companyId: 'comp_nexora_main',
-        timestamp: new Date(Date.now() - 18000000).toISOString(),
-        status: 'success' as const,
-        statusCode: 200,
-        durationMs: 388,
-        payload: { leadId: 'lead_002', name: 'Juliana Siqueira', score: 88 } as any,
-        responseSummary: 'Webhook n8n processado com sucesso. Dados enviados.',
-      },
-      {
-        id: 'log_003',
-        automationId: 'auto_003',
-        companyId: 'comp_nexora_main',
-        timestamp: new Date(Date.now() - 86400000).toISOString(),
-        status: 'error' as const,
-        statusCode: 504,
-        durationMs: 3000,
-        payload: { leadId: 'lead_005', value: 62000 } as any,
-        responseSummary: 'Gateway Timeout ao contatar o servidor Make.',
       }
     ] as Array<{
       id: string;
-      automationId: string;
+      name: string;
+      email: string;
+      passwordHash: string;
+      passwordSalt: string;
+      role: 'owner' | 'admin' | 'specialist' | 'viewer';
       companyId: string;
-      timestamp: string;
-      status: 'success' | 'error';
-      statusCode: number;
-      durationMs: number;
-      payload: any;
-      responseSummary: string;
+      createdAt: string;
+    }>,
+    sessions: {} as Record<string, { userId: string; companyId: string; expiresAt: number }>,
+    resetTokens: {} as Record<string, { email: string; expiresAt: number }>,
+    invites: {} as Record<string, {
+      token: string;
+      companyId: string;
+      companyName: string;
+      email: string;
+      name: string;
+      role: string;
+      expiresAt: number;
+      createdAt: string;
+    }>,
+    manualProgress: {} as Record<string, { completedChapters: string[]; checkedItems: string[]; lastActiveChapterId?: string }>,
+    leads: [] as Array<any>,
+    leadInteractions: [] as Array<any>,
+    marketingPlans: [] as Array<any>,
+    contentItems: [] as Array<any>,
+    campaigns: [] as Array<any>,
+    automations: [] as Array<any>,
+    executionLogs: [] as Array<any>,
+    payments: [] as Array<{
+      id: string;
+      companyId: string;
+      companyName: string;
+      userId: string;
+      userName: string;
+      userEmail: string;
+      planId: string;
+      planName: string;
+      amount: number;
+      billingCycle: 'monthly' | 'yearly';
+      method: 'PIX' | 'CARTAO_PARCELADO';
+      status: 'PENDENTE' | 'EM_ANALISE' | 'APROVADO' | 'RECUSADO' | 'CANCELADO';
+      pixKey: string;
+      pixBeneficiary: string;
+      receiptDetails?: string;
+      customerNotes?: string;
+      adminNotes?: string;
+      decisionBy?: string;
+      decisionAt?: string;
+      createdAt: string;
+      updatedAt: string;
     }>,
     plansConfig: [
       {
@@ -444,6 +144,8 @@ function getInitialDb() {
         name: 'Starter',
         priceMonthly: 197,
         priceYearly: 1970,
+        periodicity: 'monthly',
+        status: 'active',
         description: 'Ideal para profissionais autônomos e pequenas empresas iniciando em IA e marketing.',
         leadsLimit: 500,
         aiCredits: 1000,
@@ -455,14 +157,21 @@ function getInitialDb() {
           'Estúdio de conteúdo (até 30 posts/mês)',
           'Gestão de campanhas manuais',
           'Exportação em CSV',
-          'Suporte via e-mail'
-        ]
+          'Suporte via e-mail',
+          'Capítulos 1 e 2 do Manual de Crescimento'
+        ],
+        modules: ['crm', 'ai-hub', 'content', 'campaigns', 'manual'],
+        manualChapters: ['cap-1', 'cap-2'],
+        allowPix: true,
+        allowInstallments: true
       },
       {
         id: 'pro',
         name: 'Pro Growth',
         priceMonthly: 497,
         priceYearly: 4970,
+        periodicity: 'monthly',
+        status: 'active',
         popular: true,
         description: 'Para empresas em expansão que demandam automação, inteligência avançada e CRM robusto.',
         leadsLimit: 5000,
@@ -477,14 +186,20 @@ function getInitialDb() {
           'Estúdio de conteúdo com calendário editorial completo',
           'Gestão integrada de campanhas de anúncios',
           'Relatórios de ROI e conversão comercial',
-          'Controle de privacidade compatível com LGPD'
-        ]
+          'Capítulos 1 a 4 do Manual de Crescimento'
+        ],
+        modules: ['crm', 'ai-hub', 'content', 'campaigns', 'automations', 'reports', 'manual'],
+        manualChapters: ['cap-1', 'cap-2', 'cap-3', 'cap-4'],
+        allowPix: true,
+        allowInstallments: true
       },
       {
         id: 'business',
         name: 'Enterprise Business',
         priceMonthly: 1297,
         priceYearly: 12970,
+        periodicity: 'monthly',
+        status: 'active',
         description: 'A solução definitiva para agências, holdings e empresas com múltiplas equipes e alto volume.',
         leadsLimit: 50000,
         aiCredits: 25000,
@@ -496,42 +211,25 @@ function getInitialDb() {
           'Webhooks dedicados de alta velocidade',
           'Análise estratégica completa com Gemini 3.8 Flash',
           'Auditoria administrativa e controle de permissões por perfil',
-          'Exportação avançada de dados',
-          'Acompanhamento de onboarding prioritário',
+          'Acesso vitalício e integral a TODOS os capítulos do Manual',
           'SLA de atendimento garantido'
-        ]
+        ],
+        modules: ['crm', 'ai-hub', 'marketing', 'content', 'campaigns', 'automations', 'reports', 'manual'],
+        manualChapters: ['all'],
+        allowPix: true,
+        allowInstallments: true
       }
     ],
     auditLogs: [
       {
-        id: 'audit_001',
-        timestamp: new Date(Date.now() - 7200000).toISOString(),
+        id: 'audit_init_001',
+        timestamp: new Date().toISOString(),
         actorEmail: 'admin@nexora.ai',
         actorRole: 'owner',
         companyId: 'comp_nexora_main',
-        action: 'LOGIN_SUCCESS',
-        ipAddress: '177.136.24.10',
-        details: 'Acesso autenticado ao painel administrativo do proprietário.',
-      },
-      {
-        id: 'audit_002',
-        timestamp: new Date(Date.now() - 5400000).toISOString(),
-        actorEmail: 'admin@nexora.ai',
-        actorRole: 'owner',
-        companyId: 'comp_nexora_main',
-        action: 'LEAD_SCORE_UPDATE',
-        ipAddress: '177.136.24.10',
-        details: 'Recalculada pontuação de IA para lead_001 (Pontuação: 92/100).',
-      },
-      {
-        id: 'audit_003',
-        timestamp: new Date(Date.now() - 3600000).toISOString(),
-        actorEmail: 'lucas@nexusecom.com.br',
-        actorRole: 'admin',
-        companyId: 'comp_nexus_digital',
-        action: 'CAMPAIGN_UPDATE',
-        ipAddress: '189.28.14.88',
-        details: 'Orçamento de campanha Meta Ads ajustado para R$ 12.000.',
+        action: 'SYSTEM_STARTUP',
+        ipAddress: '127.0.0.1',
+        details: 'NEXORA AI inicializado em ambiente operacional seguro.',
       }
     ]
   };
@@ -695,7 +393,7 @@ app.post('/api/auth/register', (req, res) => {
       name: companyName.trim(),
       slug: companyName.toLowerCase().replace(/[^a-z0-9]+/g, '-'),
       plan: 'starter',
-      status: 'trial',
+      status: 'trial' as const,
       cnpj: '',
       industry: companyIndustry || 'Geral',
       phone: companyPhone || '',
@@ -710,7 +408,7 @@ app.post('/api/auth/register', (req, res) => {
       email: emailNormalized,
       passwordHash: hash,
       passwordSalt: salt,
-      role: 'admin',
+      role: 'admin' as const,
       companyId: companyId,
       createdAt: new Date().toISOString(),
     };
@@ -718,34 +416,13 @@ app.post('/api/auth/register', (req, res) => {
     db.get().companies.push(newCompany);
     db.get().users.push(newUser);
 
-    // Create session token
+    // Session token
     const token = crypto.randomBytes(32).toString('hex');
     db.get().sessions[token] = {
       userId,
       companyId,
       expiresAt: Date.now() + 7 * 86400000, // 7 days
     };
-
-    // Pre-populate initial marketing plan & welcome lead for the new company
-    db.get().leads.push({
-      id: `lead_${Date.now()}`,
-      companyId,
-      name: 'Exemplo: Contato Qualificado',
-      companyName: 'Empresa Modelo Ltda',
-      email: 'contato@empresamodelo.com.br',
-      phone: '+55 11 99999-0000',
-      stage: 'new',
-      opportunityValue: 5000,
-      source: 'Cadastro Inicial',
-      aiScore: 80,
-      aiQualification: 'Primeiro lead modelo gerado no cadastro para explorar o pipeline de vendas.',
-      nextAction: 'Agendar ligação de qualificação',
-      nextActionDate: new Date(Date.now() + 2 * 86400000).toISOString().split('T')[0],
-      lgpdConsent: true,
-      lgpdConsentDate: new Date().toISOString(),
-      tags: ['Primeiro Contato', 'Modelo'],
-      createdAt: new Date().toISOString(),
-    });
 
     db.save();
     logAudit(emailNormalized, 'admin', companyId, 'REGISTER_COMPANY', `Nova empresa criada: ${companyName}`, req);
@@ -973,6 +650,117 @@ app.post('/api/auth/setup-owner', (req, res) => {
   return res.json({ message: 'Conta do proprietário configurada com sucesso!' });
 });
 
+// Validate Company Invite Token
+app.get('/api/auth/invite/:token', (req, res) => {
+  const token = req.params.token;
+  const invites = (db.get() as any).invites || {};
+  const invite = invites[token];
+
+  if (!invite) {
+    return res.status(404).json({ error: 'Convite inválido ou expirado.' });
+  }
+
+  if (invite.expiresAt < Date.now()) {
+    delete invites[token];
+    db.save();
+    return res.status(400).json({ error: 'Este convite já expirou. Solicite um novo link ao administrador.' });
+  }
+
+  const company = db.get().companies.find((c) => c.id === invite.companyId);
+  return res.json({
+    valid: true,
+    invite: {
+      ...invite,
+      companyName: company ? company.name : invite.companyName,
+    },
+  });
+});
+
+// Accept Company Invite and Set Password
+app.post('/api/auth/accept-invite', (req, res) => {
+  try {
+    const { token, password, name } = req.body;
+
+    if (!token || !password) {
+      return res.status(400).json({ error: 'Token do convite e senha são obrigatórios.' });
+    }
+
+    if (password.length < 8) {
+      return res.status(400).json({ error: 'A senha deve conter pelo menos 8 dígitos.' });
+    }
+
+    const invites = (db.get() as any).invites || {};
+    const invite = invites[token];
+
+    if (!invite || invite.expiresAt < Date.now()) {
+      return res.status(400).json({ error: 'Convite expirado ou inválido.' });
+    }
+
+    const emailNormalized = invite.email.toLowerCase().trim();
+    const company = db.get().companies.find((c) => c.id === invite.companyId);
+
+    if (!company) {
+      return res.status(404).json({ error: 'Empresa vinculada ao convite não foi encontrada.' });
+    }
+
+    let user = db.get().users.find((u) => u.email.toLowerCase() === emailNormalized);
+    const { hash, salt } = hashPassword(password);
+
+    if (user) {
+      user.name = name ? name.trim() : user.name;
+      user.passwordHash = hash;
+      user.passwordSalt = salt;
+      user.companyId = company.id;
+    } else {
+      user = {
+        id: `usr_${Date.now()}_${Math.random().toString(36).substr(2, 5)}`,
+        name: name ? name.trim() : invite.name,
+        email: emailNormalized,
+        passwordHash: hash,
+        passwordSalt: salt,
+        role: (invite.role as any) || 'admin',
+        companyId: company.id,
+        createdAt: new Date().toISOString(),
+      };
+      db.get().users.push(user);
+    }
+
+    // Mark company as active if pending
+    if (company.status === 'pending') {
+      company.status = 'active';
+      company.activatedAt = new Date().toISOString();
+    }
+
+    delete invites[token];
+
+    // Create session token
+    const sessionToken = crypto.randomBytes(32).toString('hex');
+    db.get().sessions[sessionToken] = {
+      userId: user.id,
+      companyId: company.id,
+      expiresAt: Date.now() + 7 * 86400000,
+    };
+
+    db.save();
+    logAudit(user.email, user.role, company.id, 'INVITE_ACCEPTED', `Convite aceito por ${user.name}.`, req);
+
+    return res.json({
+      message: 'Cadastro concluído com sucesso! Bem-vindo à NEXORA AI.',
+      token: sessionToken,
+      user: {
+        id: user.id,
+        name: user.name,
+        email: user.email,
+        role: user.role,
+        companyId: user.companyId,
+      },
+      company,
+    });
+  } catch (err: any) {
+    return res.status(500).json({ error: 'Erro ao processar convite: ' + err.message });
+  }
+});
+
 // ==========================================
 // DASHBOARD & ANALYTICS ENDPOINTS
 // ==========================================
@@ -1013,14 +801,34 @@ app.get('/api/dashboard/stats', requireAuth, (req, res) => {
     closed_lost: leads.filter((l) => l.stage === 'closed_lost').length,
   };
 
-  const leadEvolution = [
-    { month: 'Mai', leads: Math.max(12, totalLeads - 18), pipeline: Math.round(pipelineValue * 0.45) },
-    { month: 'Jun', leads: Math.max(16, totalLeads - 14), pipeline: Math.round(pipelineValue * 0.60) },
-    { month: 'Jul', leads: Math.max(22, totalLeads - 9), pipeline: Math.round(pipelineValue * 0.72) },
-    { month: 'Ago', leads: Math.max(28, totalLeads - 5), pipeline: Math.round(pipelineValue * 0.85) },
-    { month: 'Set', leads: Math.max(34, totalLeads - 2), pipeline: Math.round(pipelineValue * 0.94) },
-    { month: 'Out', leads: totalLeads, pipeline: pipelineValue },
-  ];
+  // Real Monthly Lead Evolution based on actual records
+  const monthNames = ['Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun', 'Jul', 'Ago', 'Set', 'Out', 'Nov', 'Dez'];
+  const now = new Date();
+  const last6Months: Array<{ month: string; yearMonth: string; leads: number; pipeline: number }> = [];
+
+  for (let i = 5; i >= 0; i--) {
+    const d = new Date(now.getFullYear(), now.getMonth() - i, 1);
+    const mStr = monthNames[d.getMonth()];
+    const ym = `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}`;
+    last6Months.push({ month: mStr, yearMonth: ym, leads: 0, pipeline: 0 });
+  }
+
+  leads.forEach((l) => {
+    if (!l.createdAt) return;
+    const lDate = new Date(l.createdAt);
+    const ym = `${lDate.getFullYear()}-${String(lDate.getMonth() + 1).padStart(2, '0')}`;
+    const targetMonth = last6Months.find((m) => m.yearMonth === ym);
+    if (targetMonth) {
+      targetMonth.leads += 1;
+      targetMonth.pipeline += (l.opportunityValue || 0);
+    }
+  });
+
+  const leadEvolution = last6Months.map(({ month, leads: count, pipeline }) => ({
+    month,
+    leads: count,
+    pipeline,
+  }));
 
   return res.json({
     kpis: {
@@ -1862,39 +1670,50 @@ const MANUAL_PLAN_HIERARCHY: Record<string, number> = {
   business: 3,
 };
 
+function canAccessChapter(user: any, company: any, chapterId: string): { granted: boolean; reason?: string } {
+  // Master Owner has permanent, free, unrestricted access to ALL chapters
+  if (user && user.role === 'owner') {
+    return { granted: true };
+  }
+  if (!company) {
+    return { granted: false, reason: 'Nenhuma empresa associada ao usuário.' };
+  }
+  if (company.status !== 'active' && company.status !== 'trial') {
+    return {
+      granted: false,
+      reason: 'Acesso restrito: sua empresa precisa de uma assinatura ativa com pagamento confirmado para acessar o manual.'
+    };
+  }
+  const currentPlan = db.get().plansConfig.find((p) => p.id === company.plan);
+  if (currentPlan && Array.isArray(currentPlan.manualChapters)) {
+    if (currentPlan.manualChapters.includes('all') || currentPlan.manualChapters.includes(chapterId)) {
+      return { granted: true };
+    }
+    return {
+      granted: false,
+      reason: `O plano ${currentPlan.name} não inclui este capítulo. Faça upgrade para desbloquear.`
+    };
+  }
+  // Fallback to hierarchy
+  const userPlanLevel = MANUAL_PLAN_HIERARCHY[company.plan] || 1;
+  const chapter = growthManualChapters.find((c) => c.id === chapterId);
+  const requiredLevel = MANUAL_PLAN_HIERARCHY[chapter?.requiresPlan || 'starter'] || 1;
+  if (userPlanLevel >= requiredLevel) {
+    return { granted: true };
+  }
+  return {
+    granted: false,
+    reason: `Capítulo exclusivo para assinantes de planos superiores. Faça upgrade para liberar o acesso.`
+  };
+}
+
 app.get('/api/manual/chapters', requireAuth, (req, res) => {
   const user = (req as any).user;
   const company = (req as any).company;
-
-  // Master Owner identification: verified securely from session's user.role in the database
   const isMasterOwner = Boolean(user && user.role === 'owner');
 
-  const userPlan = company?.plan || 'starter';
-  const userPlanLevel = MANUAL_PLAN_HIERARCHY[userPlan] || 1;
-  const isCompanyActive = company?.status === 'active' || company?.status === 'trial';
-
   const chaptersMeta = growthManualChapters.map((chapter) => {
-    let accessGranted = false;
-    let locked = true;
-    let isOwnerExempt = false;
-
-    if (isMasterOwner) {
-      // Master Owner has permanent, free, unrestricted access to ALL chapters
-      accessGranted = true;
-      locked = false;
-      isOwnerExempt = true;
-    } else {
-      // Normal clients: check company plan and status
-      const requiredLevel = MANUAL_PLAN_HIERARCHY[chapter.requiresPlan] || 1;
-      if (isCompanyActive && userPlanLevel >= requiredLevel) {
-        accessGranted = true;
-        locked = false;
-      } else {
-        accessGranted = false;
-        locked = true;
-      }
-    }
-
+    const access = canAccessChapter(user, company, chapter.id);
     return {
       id: chapter.id,
       number: chapter.number,
@@ -1903,9 +1722,9 @@ app.get('/api/manual/chapters', requireAuth, (req, res) => {
       category: chapter.category,
       readTime: chapter.readTime,
       requiresPlan: chapter.requiresPlan,
-      locked,
-      accessGranted,
-      isOwnerExempt,
+      locked: !access.granted,
+      accessGranted: access.granted,
+      isOwnerExempt: isMasterOwner,
       summary: chapter.summary,
       sectionsCount: chapter.sections ? chapter.sections.length : 0,
       promptsCount: chapter.aiPrompts ? chapter.aiPrompts.length : 0,
@@ -1926,7 +1745,7 @@ app.get('/api/manual/chapters', requireAuth, (req, res) => {
     isOwner: isMasterOwner,
     ownerName: isMasterOwner ? user.name : 'Alifer Madeiro',
     userRole: user.role,
-    companyPlan: userPlan,
+    companyPlan: company?.plan || 'starter',
     companyStatus: company?.status,
   });
 });
@@ -1934,7 +1753,6 @@ app.get('/api/manual/chapters', requireAuth, (req, res) => {
 app.get('/api/manual/chapters/:id', requireAuth, (req, res) => {
   const user = (req as any).user;
   const company = (req as any).company;
-
   const isMasterOwner = Boolean(user && user.role === 'owner');
   const chapterId = req.params.id;
 
@@ -1943,30 +1761,15 @@ app.get('/api/manual/chapters/:id', requireAuth, (req, res) => {
     return res.status(404).json({ error: 'Capítulo do manual não encontrado.' });
   }
 
-  const userPlan = company?.plan || 'starter';
-  const userPlanLevel = MANUAL_PLAN_HIERARCHY[userPlan] || 1;
-  const requiredLevel = MANUAL_PLAN_HIERARCHY[chapter.requiresPlan] || 1;
-  const isCompanyActive = company?.status === 'active' || company?.status === 'trial';
-
-  // Master Owner check
-  if (isMasterOwner) {
-    return res.json({
-      ...chapter,
-      locked: false,
-      accessGranted: true,
-      isOwnerExempt: true,
-    });
-  }
-
-  // Normal clients authorization
-  if (!isCompanyActive || userPlanLevel < requiredLevel) {
+  const access = canAccessChapter(user, company, chapterId);
+  if (!access.granted) {
     return res.status(403).json({
-      error: `Capítulo exclusivo para assinantes do plano ${chapter.requiresPlan.toUpperCase()}. Faça upgrade para liberar o acesso.`,
+      error: access.reason || 'Acesso não autorizado a este capítulo.',
       locked: true,
       accessGranted: false,
       requiresPlan: chapter.requiresPlan,
-      userPlan,
-      isOwnerExempt: false,
+      userPlan: company?.plan || 'starter',
+      isOwnerExempt: isMasterOwner,
     });
   }
 
@@ -1974,7 +1777,7 @@ app.get('/api/manual/chapters/:id', requireAuth, (req, res) => {
     ...chapter,
     locked: false,
     accessGranted: true,
-    isOwnerExempt: false,
+    isOwnerExempt: isMasterOwner,
   });
 });
 
@@ -2076,6 +1879,122 @@ app.get('/api/reports', requireAuth, (req, res) => {
 });
 
 // ==========================================
+// PLANS & PRICING (Public/Client Endpoint)
+// ==========================================
+app.get('/api/plans', (req, res) => {
+  const allPlans = db.get().plansConfig;
+  // Return active plans for clients, with companies count if queried
+  const activePlans = allPlans.filter((p) => (p as any).status !== 'archived' && (p as any).status !== 'inactive');
+  return res.json(activePlans);
+});
+
+// ==========================================
+// PAYMENTS & PIX SUBSCRIPTIONS
+// ==========================================
+app.post('/api/payments', requireAuth, (req, res) => {
+  try {
+    const user = (req as any).user;
+    const company = (req as any).company;
+    const { planId, billingCycle = 'monthly', method = 'PIX', customerNotes } = req.body;
+
+    if (!planId) {
+      return res.status(400).json({ error: 'Plano é obrigatório.' });
+    }
+
+    const plan = db.get().plansConfig.find((p) => p.id === planId);
+    if (!plan) {
+      return res.status(404).json({ error: 'Plano não encontrado.' });
+    }
+
+    if ((plan as any).status === 'archived') {
+      return res.status(400).json({ error: 'Este plano está arquivado e não aceita novas contratações.' });
+    }
+
+    const amount = billingCycle === 'yearly' ? plan.priceYearly : plan.priceMonthly;
+
+    if (!db.get().payments) {
+      (db.get() as any).payments = [];
+    }
+
+    const paymentId = `pay_${Date.now()}_${Math.random().toString(36).substr(2, 6)}`;
+    const newPayment = {
+      id: paymentId,
+      companyId: company.id,
+      companyName: company.name,
+      userId: user.id,
+      userName: user.name,
+      userEmail: user.email,
+      planId: plan.id,
+      planName: plan.name,
+      amount,
+      billingCycle: billingCycle as 'monthly' | 'yearly',
+      method: method as 'PIX' | 'CARTAO_PARCELADO',
+      status: 'PENDENTE' as const,
+      pixKey: '11973479473',
+      pixBeneficiary: 'Alifer Madeiro / NEXORA AI',
+      customerNotes: customerNotes || '',
+      createdAt: new Date().toISOString(),
+      updatedAt: new Date().toISOString(),
+    };
+
+    db.get().payments.unshift(newPayment);
+    db.save();
+
+    logAudit(user.email, user.role, company.id, 'PAYMENT_INITIATED', `Cobrança Pix iniciada para o plano ${plan.name} (R$ ${amount}).`, req);
+
+    return res.status(201).json(newPayment);
+  } catch (err: any) {
+    return res.status(500).json({ error: 'Erro ao criar pagamento: ' + err.message });
+  }
+});
+
+app.post('/api/payments/:id/receipt', requireAuth, (req, res) => {
+  try {
+    const user = (req as any).user;
+    const company = (req as any).company;
+    const paymentId = req.params.id;
+    const { receiptDetails, customerNotes } = req.body;
+
+    if (!receiptDetails || !receiptDetails.trim()) {
+      return res.status(400).json({ error: 'Informe os dados ou código do comprovante da transação Pix.' });
+    }
+
+    const payments = db.get().payments || [];
+    const payment = payments.find((p) => p.id === paymentId && p.companyId === company.id);
+
+    if (!payment) {
+      return res.status(404).json({ error: 'Registro de pagamento não encontrado.' });
+    }
+
+    payment.receiptDetails = receiptDetails.trim();
+    if (customerNotes) {
+      payment.customerNotes = customerNotes.trim();
+    }
+    payment.status = 'EM_ANALISE';
+    payment.updatedAt = new Date().toISOString();
+
+    (company as any).paymentStatus = 'EM_ANALISE';
+
+    db.save();
+    logAudit(user.email, user.role, company.id, 'PAYMENT_RECEIPT_SUBMITTED', `Comprovante Pix enviado para conferência pelo cliente.`, req);
+
+    return res.json({
+      message: 'Comprovante enviado com sucesso para análise do administrador.',
+      payment,
+    });
+  } catch (err: any) {
+    return res.status(500).json({ error: 'Erro ao enviar comprovante: ' + err.message });
+  }
+});
+
+app.get('/api/payments/my', requireAuth, (req, res) => {
+  const company = (req as any).company;
+  const payments = db.get().payments || [];
+  const companyPayments = payments.filter((p) => p.companyId === company.id);
+  return res.json(companyPayments);
+});
+
+// ==========================================
 // OWNER / SUPER ADMIN MODULE (Exclusive)
 // ==========================================
 app.get('/api/admin/overview', requireAuth, requireOwner, (req, res) => {
@@ -2083,6 +2002,7 @@ app.get('/api/admin/overview', requireAuth, requireOwner, (req, res) => {
   const users = db.get().users;
   const leads = db.get().leads;
   const plans = db.get().plansConfig;
+  const payments = db.get().payments || [];
 
   let totalMRR = 0;
   companies.forEach((c) => {
@@ -2097,10 +2017,14 @@ app.get('/api/admin/overview', requireAuth, requireOwner, (req, res) => {
       totalCompanies: companies.length,
       activeCompanies: companies.filter((c) => c.status === 'active').length,
       trialCompanies: companies.filter((c) => c.status === 'trial').length,
+      pendingCompanies: companies.filter((c) => (c as any).status === 'pending').length,
+      suspendedCompanies: companies.filter((c) => (c as any).status === 'suspended').length,
       totalUsers: users.length,
       totalLeadsSystemWide: leads.length,
       estimatedMRR: totalMRR,
       plansConfigured: plans.length,
+      pendingPayments: payments.filter((p) => p.status === 'EM_ANALISE' || p.status === 'PENDENTE').length,
+      approvedPayments: payments.filter((p) => p.status === 'APROVADO').length,
     },
     companies,
     users: users.map((u) => ({
@@ -2115,21 +2039,124 @@ app.get('/api/admin/overview', requireAuth, requireOwner, (req, res) => {
   });
 });
 
+// Companies Management
 app.get('/api/admin/companies', requireAuth, requireOwner, (req, res) => {
   return res.json(db.get().companies);
+});
+
+app.post('/api/admin/companies', requireAuth, requireOwner, (req, res) => {
+  try {
+    const actor = (req as any).user;
+    const {
+      name,
+      contactName,
+      contactEmail,
+      phone,
+      cnpj,
+      industry,
+      plan = 'starter',
+      status = 'pending',
+      initialPassword,
+      sendInvite = true,
+    } = req.body;
+
+    if (!name || !name.trim()) {
+      return res.status(400).json({ error: 'Nome comercial da empresa é obrigatório.' });
+    }
+
+    const companyId = `comp_${Date.now()}_${Math.random().toString(36).substr(2, 5)}`;
+    const newCompany: any = {
+      id: companyId,
+      name: name.trim(),
+      slug: name.toLowerCase().replace(/[^a-z0-9]+/g, '-'),
+      plan: plan || 'starter',
+      status: status || 'pending',
+      cnpj: cnpj ? cnpj.trim() : '',
+      industry: industry ? industry.trim() : 'Geral',
+      phone: phone ? phone.trim() : '',
+      contactName: contactName ? contactName.trim() : '',
+      contactEmail: contactEmail ? contactEmail.toLowerCase().trim() : '',
+      paymentStatus: status === 'active' ? 'APROVADO' : 'PENDENTE',
+      createdAt: new Date().toISOString(),
+    };
+
+    if (status === 'active') {
+      newCompany.activatedAt = new Date().toISOString();
+    }
+
+    db.get().companies.push(newCompany);
+
+    let createdUser: any = null;
+    let inviteToken: string | undefined = undefined;
+    let inviteUrl: string | undefined = undefined;
+
+    // If initial password provided, create user directly
+    if (initialPassword && contactEmail) {
+      const { hash, salt } = hashPassword(initialPassword);
+      createdUser = {
+        id: `usr_${Date.now()}_${Math.random().toString(36).substr(2, 5)}`,
+        name: contactName ? contactName.trim() : name.trim(),
+        email: contactEmail.toLowerCase().trim(),
+        passwordHash: hash,
+        passwordSalt: salt,
+        role: 'admin',
+        companyId,
+        createdAt: new Date().toISOString(),
+      };
+      db.get().users.push(createdUser);
+    } else if (contactEmail && sendInvite) {
+      // Create invitation token for client to define own password securely
+      inviteToken = crypto.randomBytes(24).toString('hex');
+      if (!(db.get() as any).invites) {
+        (db.get() as any).invites = {};
+      }
+      (db.get() as any).invites[inviteToken] = {
+        token: inviteToken,
+        companyId,
+        companyName: newCompany.name,
+        email: contactEmail.toLowerCase().trim(),
+        name: contactName ? contactName.trim() : name.trim(),
+        role: 'admin',
+        expiresAt: Date.now() + 7 * 86400000, // 7 days
+        createdAt: new Date().toISOString(),
+      };
+      inviteUrl = `/#invite=${inviteToken}`;
+    }
+
+    db.save();
+    logAudit(actor.email, 'owner', companyId, 'COMPANY_CREATED', `Empresa ${newCompany.name} cadastrada com status ${status}.`, req);
+
+    return res.status(201).json({
+      message: 'Empresa cadastrada com sucesso!',
+      company: newCompany,
+      user: createdUser ? {
+        id: createdUser.id,
+        name: createdUser.name,
+        email: createdUser.email,
+        role: createdUser.role,
+        companyId: createdUser.companyId,
+      } : undefined,
+      inviteToken,
+      inviteUrl,
+    });
+  } catch (err: any) {
+    return res.status(500).json({ error: 'Erro ao cadastrar empresa: ' + err.message });
+  }
 });
 
 app.put('/api/admin/companies/:id', requireAuth, requireOwner, (req, res) => {
   const comp = db.get().companies.find((c) => c.id === req.params.id);
   if (!comp) return res.status(404).json({ error: 'Empresa não encontrada.' });
 
-  const { name, plan, status, industry, phone, cnpj } = req.body;
+  const { name, plan, status, industry, phone, cnpj, contactName, contactEmail } = req.body;
   if (name !== undefined) comp.name = name;
   if (plan !== undefined) comp.plan = plan;
   if (status !== undefined) comp.status = status;
   if (industry !== undefined) comp.industry = industry;
   if (phone !== undefined) comp.phone = phone;
   if (cnpj !== undefined) comp.cnpj = cnpj;
+  if (contactName !== undefined) (comp as any).contactName = contactName;
+  if (contactEmail !== undefined) (comp as any).contactEmail = contactEmail;
 
   db.save();
   logAudit((req as any).user.email, 'owner', comp.id, 'COMPANY_ADMIN_UPDATE', `Dados da empresa ${comp.name} alterados pelo proprietário.`, req);
@@ -2137,17 +2164,288 @@ app.put('/api/admin/companies/:id', requireAuth, requireOwner, (req, res) => {
   return res.json(comp);
 });
 
-app.get('/api/admin/plans', requireAuth, (req, res) => {
-  return res.json(db.get().plansConfig);
+app.put('/api/admin/companies/:id/status', requireAuth, requireOwner, (req, res) => {
+  const comp = db.get().companies.find((c) => c.id === req.params.id);
+  if (!comp) return res.status(404).json({ error: 'Empresa não encontrada.' });
+
+  const { status, reason } = req.body;
+  if (!status) return res.status(400).json({ error: 'Status é obrigatório.' });
+
+  const oldStatus = comp.status;
+  comp.status = status;
+  if (status === 'active' && !(comp as any).activatedAt) {
+    (comp as any).activatedAt = new Date().toISOString();
+  }
+
+  db.save();
+  logAudit(
+    (req as any).user.email,
+    'owner',
+    comp.id,
+    'COMPANY_STATUS_CHANGED',
+    `Status da empresa ${comp.name} alterado de ${oldStatus} para ${status}. Motivo: ${reason || 'Não informado'}`,
+    req
+  );
+
+  return res.json({ message: `Status da empresa atualizado para ${status}.`, company: comp });
 });
 
-app.put('/api/admin/plans', requireAuth, requireOwner, (req, res) => {
+app.post('/api/admin/companies/:id/invite', requireAuth, requireOwner, (req, res) => {
+  const comp = db.get().companies.find((c) => c.id === req.params.id);
+  if (!comp) return res.status(404).json({ error: 'Empresa não encontrada.' });
+
+  const { email, name } = req.body;
+  const inviteEmail = (email || (comp as any).contactEmail || '').toLowerCase().trim();
+  const inviteName = name || (comp as any).contactName || comp.name;
+
+  if (!inviteEmail) {
+    return res.status(400).json({ error: 'E-mail do responsável é obrigatório para gerar o convite.' });
+  }
+
+  const inviteToken = crypto.randomBytes(24).toString('hex');
+  if (!(db.get() as any).invites) {
+    (db.get() as any).invites = {};
+  }
+
+  (db.get() as any).invites[inviteToken] = {
+    token: inviteToken,
+    companyId: comp.id,
+    companyName: comp.name,
+    email: inviteEmail,
+    name: inviteName,
+    role: 'admin',
+    expiresAt: Date.now() + 7 * 86400000,
+    createdAt: new Date().toISOString(),
+  };
+
+  db.save();
+  logAudit((req as any).user.email, 'owner', comp.id, 'INVITE_GENERATED', `Convite gerado para ${inviteEmail}.`, req);
+
+  return res.json({
+    message: 'Convite gerado com sucesso!',
+    inviteToken,
+    inviteUrl: `/#invite=${inviteToken}`,
+  });
+});
+
+// Admin Payments Management
+app.get('/api/admin/payments', requireAuth, requireOwner, (req, res) => {
+  const payments = db.get().payments || [];
+  const { status } = req.query;
+
+  if (status && typeof status === 'string') {
+    return res.json(payments.filter((p) => p.status === status));
+  }
+
+  return res.json(payments);
+});
+
+app.put('/api/admin/payments/:id/status', requireAuth, requireOwner, (req, res) => {
+  try {
+    const actor = (req as any).user;
+    const paymentId = req.params.id;
+    const { status, adminNotes } = req.body;
+
+    const allowed = ['PENDENTE', 'EM_ANALISE', 'APROVADO', 'RECUSADO', 'CANCELADO'];
+    if (!allowed.includes(status)) {
+      return res.status(400).json({ error: 'Status de pagamento inválido.' });
+    }
+
+    const payments = db.get().payments || [];
+    const payment = payments.find((p) => p.id === paymentId);
+
+    if (!payment) {
+      return res.status(404).json({ error: 'Pagamento não encontrado.' });
+    }
+
+    const oldStatus = payment.status;
+    payment.status = status;
+    payment.adminNotes = adminNotes !== undefined ? adminNotes : payment.adminNotes;
+    payment.decisionBy = actor.name;
+    payment.decisionAt = new Date().toISOString();
+    payment.updatedAt = new Date().toISOString();
+
+    const company = db.get().companies.find((c) => c.id === payment.companyId);
+
+    if (status === 'APROVADO') {
+      if (company) {
+        company.plan = payment.planId;
+        company.status = 'active';
+        (company as any).paymentStatus = 'APROVADO';
+        (company as any).activatedAt = new Date().toISOString();
+      }
+      logAudit(
+        actor.email,
+        'owner',
+        payment.companyId,
+        'PAYMENT_APPROVED',
+        `Pagamento de R$ ${payment.amount} (${payment.planName}) APROVADO pelo administrador. Plano liberado para ${payment.companyName}.`,
+        req
+      );
+    } else if (status === 'RECUSADO') {
+      if (company) {
+        (company as any).paymentStatus = 'RECUSADO';
+      }
+      logAudit(
+        actor.email,
+        'owner',
+        payment.companyId,
+        'PAYMENT_REJECTED',
+        `Pagamento de R$ ${payment.amount} RECUSADO pelo administrador. Motivo: ${adminNotes || 'Não informado'}.`,
+        req
+      );
+    } else {
+      logAudit(
+        actor.email,
+        'owner',
+        payment.companyId,
+        'PAYMENT_STATUS_UPDATE',
+        `Status de pagamento alterado de ${oldStatus} para ${status}.`,
+        req
+      );
+    }
+
+    db.save();
+
+    return res.json({
+      message: `Pagamento ${status === 'APROVADO' ? 'aprovado e plano ativado' : 'atualizado'} com sucesso!`,
+      payment,
+      company,
+    });
+  } catch (err: any) {
+    return res.status(500).json({ error: 'Erro ao atualizar pagamento: ' + err.message });
+  }
+});
+
+// Admin Plans Management
+app.get('/api/admin/plans', requireAuth, (req, res) => {
+  const plans = db.get().plansConfig;
+  const companies = db.get().companies;
+  const enriched = plans.map((p) => ({
+    ...p,
+    companiesCount: companies.filter((c) => c.plan === p.id).length,
+  }));
+  return res.json(enriched);
+});
+
+app.post('/api/admin/plans', requireAuth, requireOwner, (req, res) => {
+  try {
+    const actor = (req as any).user;
+    const {
+      name,
+      priceMonthly,
+      priceYearly,
+      periodicity = 'monthly',
+      status = 'active',
+      description,
+      leadsLimit = 1000,
+      aiCredits = 1000,
+      automationsLimit = 5,
+      usersLimit = 3,
+      features = [],
+      modules = ['crm', 'ai-hub', 'content', 'campaigns', 'manual'],
+      manualChapters = ['cap-1'],
+      allowPix = true,
+      allowInstallments = true,
+      popular = false,
+    } = req.body;
+
+    if (!name || priceMonthly === undefined) {
+      return res.status(400).json({ error: 'Nome do plano e preço mensal são obrigatórios.' });
+    }
+
+    const planId = req.body.id
+      ? req.body.id.toLowerCase().replace(/[^a-z0-9_-]+/g, '-')
+      : `plan_${Date.now()}`;
+
+    const existing = db.get().plansConfig.find((p) => p.id === planId);
+    if (existing) {
+      return res.status(400).json({ error: 'Já existe um plano com este identificador.' });
+    }
+
+    const newPlan: any = {
+      id: planId,
+      name: name.trim(),
+      priceMonthly: Number(priceMonthly) || 0,
+      priceYearly: Number(priceYearly) || Number(priceMonthly) * 10,
+      periodicity,
+      status,
+      description: description ? description.trim() : '',
+      leadsLimit: Number(leadsLimit) || 1000,
+      aiCredits: Number(aiCredits) || 1000,
+      automationsLimit: Number(automationsLimit) || 5,
+      usersLimit: Number(usersLimit) || 3,
+      features: Array.isArray(features) ? features : [],
+      modules: Array.isArray(modules) ? modules : ['crm', 'ai-hub', 'content', 'campaigns', 'manual'],
+      manualChapters: Array.isArray(manualChapters) ? manualChapters : ['cap-1'],
+      allowPix: Boolean(allowPix),
+      allowInstallments: Boolean(allowInstallments),
+      popular: Boolean(popular),
+    };
+
+    db.get().plansConfig.push(newPlan);
+    db.save();
+
+    logAudit(actor.email, 'owner', 'system', 'PLAN_CREATED', `Novo plano criado: ${newPlan.name} (R$ ${newPlan.priceMonthly}/mês).`, req);
+
+    return res.status(201).json(newPlan);
+  } catch (err: any) {
+    return res.status(500).json({ error: 'Erro ao criar plano: ' + err.message });
+  }
+});
+
+app.put('/api/admin/plans/:id', requireAuth, requireOwner, (req, res) => {
+  try {
+    const actor = (req as any).user;
+    const plan = db.get().plansConfig.find((p) => p.id === req.params.id);
+    if (!plan) return res.status(404).json({ error: 'Plano não encontrado.' });
+
+    const fields = [
+      'name', 'priceMonthly', 'priceYearly', 'periodicity', 'status',
+      'description', 'leadsLimit', 'aiCredits', 'automationsLimit',
+      'usersLimit', 'features', 'modules', 'manualChapters',
+      'allowPix', 'allowInstallments', 'popular'
+    ];
+
+    fields.forEach((f) => {
+      if (req.body[f] !== undefined) {
+        (plan as any)[f] = req.body[f];
+      }
+    });
+
+    db.save();
+    logAudit(actor.email, 'owner', 'system', 'PLAN_UPDATED', `Plano ${plan.name} atualizado pelo proprietário.`, req);
+
+    return res.json(plan);
+  } catch (err: any) {
+    return res.status(500).json({ error: 'Erro ao editar plano: ' + err.message });
+  }
+});
+
+app.delete('/api/admin/plans/:id', requireAuth, requireOwner, (req, res) => {
+  try {
+    const actor = (req as any).user;
+    const plan = db.get().plansConfig.find((p) => p.id === req.params.id);
+    if (!plan) return res.status(404).json({ error: 'Plano não encontrado.' });
+
+    // Mark as archived to preserve existing customers and payment history
+    (plan as any).status = 'archived';
+    db.save();
+
+    logAudit(actor.email, 'owner', 'system', 'PLAN_ARCHIVED', `Plano ${plan.name} arquivado pelo proprietário.`, req);
+    return res.json({ message: `Plano ${plan.name} arquivado com sucesso. Assinaturas existentes preservadas.` });
+  } catch (err: any) {
+    return res.status(500).json({ error: 'Erro ao arquivar plano: ' + err.message });
+  }
+});
+
+app.put('/api/admin/plans/batch', requireAuth, requireOwner, (req, res) => {
   const { plans } = req.body;
   if (!Array.isArray(plans)) return res.status(400).json({ error: 'Lista de planos inválida.' });
 
   db.get().plansConfig = plans;
   db.save();
-  logAudit((req as any).user.email, 'owner', 'system', 'PLANS_UPDATED', 'Preços e limites dos planos comerciais atualizados.', req);
+  logAudit((req as any).user.email, 'owner', 'system', 'PLANS_UPDATED', 'Preços e limites dos planos comerciais atualizados em lote.', req);
 
   return res.json({ message: 'Planos comerciais atualizados com sucesso.', plans });
 });
